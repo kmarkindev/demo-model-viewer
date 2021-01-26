@@ -1,16 +1,30 @@
 #pragma once
 
+#include <string>
 #include <exception>
 
-struct InvalidParamsException : std::exception
+struct CustomException : public std::exception
 {
+	const virtual std::string GetMessage() const noexcept
+	{
+		return "No message specified";
+	}
+
 	const char* what() const noexcept override
+	{
+		return GetMessage().c_str();
+	}
+};
+
+struct InvalidParamsException : public CustomException
+{
+	const std::string GetMessage() const noexcept override
 	{
 		return "Invalid input params";
 	}
 };
 
-struct ModelNotFoundException : std::exception
+struct ModelNotFoundException : public CustomException
 {
 	std::string m_path;
 
@@ -19,21 +33,21 @@ struct ModelNotFoundException : std::exception
 	{
 	}
 
-	const char* what() const noexcept override
+	const std::string GetMessage() const noexcept override
 	{
-		return ("Model not found for given path: " + m_path).c_str();
+		return "Model not found for given path: " + m_path;
 	}
 };
 
-struct ApplicationNotInitializedException : std::exception
+struct ApplicationNotInitializedException : public CustomException
 {
-	const char* what() const noexcept override
+	const std::string GetMessage() const noexcept override
 	{
 		return "Application is not initialized. Call Application::Init() to initialize it";
 	}
 };
 
-struct ApplicationInitializationException : std::exception
+struct ApplicationInitializationException : public CustomException
 {
 	std::string m_message;
 
@@ -42,13 +56,13 @@ struct ApplicationInitializationException : std::exception
 	{
 	}
 
-	const char* what() const noexcept override
+	const std::string GetMessage() const noexcept override
 	{
-		return m_message.c_str();
+		return m_message;
 	}
 };
 
-struct ShaderCompileException : std::exception
+struct ShaderCompileException : public CustomException
 {
 	std::string m_message;
 
@@ -57,13 +71,13 @@ struct ShaderCompileException : std::exception
 	{
 	}
 
-	const char* what() const noexcept override
+	const std::string GetMessage() const noexcept override
 	{
-		return ("Shader compile error: " + m_message).c_str();
+		return "Shader compile error: " + m_message;
 	}
 };
 
-struct ProgramLinkException : std::exception
+struct ProgramLinkException : public CustomException
 {
 	std::string m_message;
 
@@ -72,29 +86,29 @@ struct ProgramLinkException : std::exception
 	{
 	}
 
-	const char* what() const noexcept override
+	const std::string GetMessage() const noexcept override
 	{
-		return ("Program link error: " + m_message).c_str();
+		return "Program link error: " + m_message;
 	}
 };
 
-struct ShaderNotLoadedException : std::exception
+struct ShaderNotLoadedException : public CustomException
 {
-	const char* what() const noexcept override
+	const std::string GetMessage() const noexcept override
 	{
 		return "Cannot use shader because it's not loaded. Call Shader::Load(...)";
 	}
 };
 
-struct NotImplementedException : std::exception
+struct NotImplementedException : public CustomException
 {
-	const char* what() const noexcept override
+	const std::string GetMessage() const noexcept override
 	{
 		return "Not implemented exception";
 	}
 };
 
-struct CannotLoadModel : std::exception
+struct CannotLoadModel : public CustomException
 {
 	std::string m_path;
 
@@ -103,8 +117,8 @@ struct CannotLoadModel : std::exception
 	{
 	}
 
-	const char* what() const noexcept override
+	const std::string GetMessage() const noexcept override
 	{
-		return ("Cannot load given modal from path: " + m_path).c_str();
+		return "Cannot load given modal from path: " + m_path;
 	}
 };
