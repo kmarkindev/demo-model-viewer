@@ -13,5 +13,5 @@ out vec3 normalDir;
 void main()
 {
 	normalDir = normal;
-	gl_Position = ProjectionMatrix * ViewMatrix * ModelMatrix * vec4(verticle.xyz, 1);
+	gl_Position = ProjectionMatrix * ViewMatrix * ModelMatrix * vec4(verticle.xyz, 1.0f);
 }
