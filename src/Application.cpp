@@ -7,12 +7,13 @@ void Application::Init()
         throw ApplicationInitializationException("GLFW init error");
     }
 
-    if (WINDOW_FULLSCREEN == true)
+    if (g_config.viewportSettings.fullScreen == true)
     {
         m_monitor = glfwGetPrimaryMonitor();
     }
 
-    m_window = glfwCreateWindow(VIEWPORT_WIDTH, VIEWPORT_HEIGHT, DEMO_NAME, m_monitor, nullptr);
+    m_window = glfwCreateWindow(g_config.viewportSettings.width,
+        g_config.viewportSettings.height, g_config.windowTitle.c_str(), m_monitor, nullptr);
 
     if (!m_window)
     {

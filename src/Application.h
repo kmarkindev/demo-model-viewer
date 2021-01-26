@@ -8,10 +8,9 @@
 #include <string>
 #include <vector>
 #include "Exceptions.h"
-#include "Settings.h"
-#include "InputParams.h"
+#include "Config.h"
 
-extern InputParams g_inputParams;
+extern Config g_config;
 
 class Application 
 {

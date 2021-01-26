@@ -4,7 +4,7 @@ target_sources(ModelViewer PRIVATE
 	Application.h
 	Exceptions.h
 	Settings.h
-	InputParams.h
-	InputParams.cpp
+	Config.h
+	Config.cpp
 	stb_image.h
 )
