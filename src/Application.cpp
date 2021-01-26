@@ -40,7 +40,9 @@ void Application::Start()
 {
     CheckInitialization();
 
-
+    Shader shader = Shader(g_config.rootFolder + "/assets/shaders/basic_vertex.vert",
+        g_config.rootFolder + "/assets/shaders/basic_fragment.frag");
+    shader.LoadAndCompile();
     
     while (!glfwWindowShouldClose(m_window))
     {

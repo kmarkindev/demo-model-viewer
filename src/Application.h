@@ -7,6 +7,7 @@
 
 #include <string>
 #include <vector>
+#include "Shader.h"
 #include "Exceptions.h"
 #include "Config.h"
 
