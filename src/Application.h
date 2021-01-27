@@ -16,6 +16,7 @@
 
 #include <glm/glm.hpp>
 #include <glm/matrix.hpp>
+#include <glm/gtx/quaternion.hpp>
 #include <glm/gtx/transform.hpp>
 
 extern Config g_config;

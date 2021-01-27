@@ -127,11 +127,21 @@ void Application::Start()
         meshes->push_back(mesh);
     }
 
+    auto cameraPosition = glm::vec3(0.f, 0.f, 50.f);
     auto modelPosition = glm::vec3(0.f, 0.f, 0.f);
-    auto cameraPosition = glm::vec3(50.f, 0.f, 50.f);
+    auto modelRotation = glm::vec3(0.f, -45.f, 0.f);
     float scale = 0.1f;
+    auto modelScale = glm::vec3(scale, scale, scale);
 
-    auto modelMatrix = glm::scale(glm::translate(glm::mat4(1.f), modelPosition), glm::vec3(scale, scale, scale));
+    auto quat = glm::angleAxis(glm::radians(modelRotation.x), glm::vec3(1.f, 0.f, 0.f))
+        * glm::angleAxis(glm::radians(modelRotation.y), glm::vec3(0.f, 1.f, 0.f))
+        * glm::angleAxis(glm::radians(modelRotation.z), glm::vec3(0.f, 0.f, 1.f));
+
+    auto scaleMat = glm::scale(glm::mat4(1.0f), modelScale);
+    auto rotateMat = glm::toMat4(quat);
+    auto translateMat = glm::translate(glm::mat4(1.0f), modelPosition);
+
+    auto modelMatrix = translateMat * rotateMat * scaleMat;
 
     auto viewMatrix = glm::lookAt(
         cameraPosition,
