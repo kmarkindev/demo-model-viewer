@@ -8,4 +8,16 @@ target_sources(ModelViewer PRIVATE
 	stb_image.h
 	Shader.h
 	Shader.cpp
+	AssimpLoader.h
+	AssimpLoader.cpp
+	Mesh.h
+	Mesh.cpp
+	Model.h
+	Model.cpp
+	Camera.h
+	Camera.cpp
+	Object.h
+	Object.cpp
+	Renderer.h
+	Renderer.cpp
 )

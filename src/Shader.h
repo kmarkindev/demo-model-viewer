@@ -7,9 +7,13 @@
 #include <glm/glm.hpp>
 #include "Exceptions.h"
 
+class Renderer;
+
 class Shader
 {
 private:
+
+	friend class Renderer;
 
 	GLuint m_program;
 

@@ -13,7 +13,9 @@
 #include "Shader.h"
 #include "Exceptions.h"
 #include "Config.h"
-
+#include "AssimpLoader.h"
+#include "Camera.h"
+#include "Renderer.h"
 #include <glm/glm.hpp>
 #include <glm/matrix.hpp>
 #include <glm/gtx/quaternion.hpp>
@@ -28,6 +30,8 @@ private:
 	GLFWwindow* m_window = nullptr;
 	GLFWmonitor* m_monitor = nullptr;
 	bool m_isInitialized = false;
+	AssimpLoader* m_loader = nullptr;
+	Renderer* m_renderer = nullptr;
 
 	void CheckInitialization();
 
