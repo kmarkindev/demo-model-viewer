@@ -7,9 +7,16 @@
 
 #include <string>
 #include <vector>
+#include <assimp/Importer.hpp>
+#include <assimp/scene.h>
+#include <assimp/postprocess.h>
 #include "Shader.h"
 #include "Exceptions.h"
 #include "Config.h"
+
+#include <glm/glm.hpp>
+#include <glm/matrix.hpp>
+#include <glm/gtx/transform.hpp>
 
 extern Config g_config;
 

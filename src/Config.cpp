@@ -2,5 +2,5 @@
 
 std::string Config::GetModelPath()
 {
-	return rootFolder + "\\" + modelPath;
+	return rootFolder + modelPath;
 }

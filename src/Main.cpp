@@ -32,7 +32,9 @@ Config parseConfig(int argc, char* argv[])
 
     Config params;
 
-    params.modelPath = "/assets/models/derringer/derringer.fbx";
+    //params.modelPath = "/assets/models/derringer22/derringer.fbx";
+    //params.modelPath = "/assets/models/cube.obj";
+    params.modelPath = "/assets/models/backpack/Survival_BackPack_2.fbx";
     params.rootFolder = appPath.substr(0, appPath.find_last_of("\\"));
 
     return params;

@@ -4,6 +4,8 @@ out vec4 color;
 
 in vec3 normalDir;
 
+uniform vec3 LightDir;
+
 void main()
 {
 	vec3 lightDir = normalize(vec3(0.5f, 0.5f, 0.0f));
