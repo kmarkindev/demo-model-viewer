@@ -9,3 +9,8 @@ Model::~Model()
 {
 	delete m_meshes;
 }
+
+void Model::SetShader(Shader* shader)
+{
+	m_shader = shader;
+}

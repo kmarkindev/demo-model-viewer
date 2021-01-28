@@ -6,8 +6,17 @@ void Renderer::Init()
 	glEnable(GL_DEPTH_TEST);
 }
 
-void Renderer::Draw(Model* model, Shader* shader, Camera* camera)
+void Renderer::Draw(Model* model, Camera* camera, DirLight* light)
 {
+	auto* shader = model->m_shader;
+
+	shader->UseProgram();
+
+	shader->SetMat4Uniform("ModelMatrix", model->GetModelMatrix());
+	shader->SetMat4Uniform("ViewMatrix", camera->GetViewMatrix());
+	shader->SetMat4Uniform("ProjectionMatrix", camera->GetProjectionMatrix());
+	shader->SetVec3Uniform("LightDir", light->GetForwardVector());
+
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	for each (Mesh mesh in model->m_meshes[0])

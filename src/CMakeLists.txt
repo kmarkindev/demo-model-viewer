@@ -20,4 +20,6 @@ target_sources(ModelViewer PRIVATE
 	Object.cpp
 	Renderer.h
 	Renderer.cpp
+	DirLight.h
+	DirLight.cpp
 )

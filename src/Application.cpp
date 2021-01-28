@@ -36,6 +36,9 @@ void Application::Init()
     m_loader = new AssimpLoader(aiProcess_Triangulate 
         | aiProcess_FlipUVs | aiProcess_PreTransformVertices);
 
+    m_renderer = new Renderer();
+    m_renderer->Init();
+
     m_isInitialized = true;
 }
 
@@ -49,29 +52,21 @@ void Application::Start()
 
     Camera camera = Camera();
     Model model = m_loader->LoadModel(g_config.GetModelPath());
+    model.SetShader(&shader);
     model.SetScale({ 0.1f, 0.1f, 0.1f });
 
     camera.SetPerspectiveMatrix(90, g_config.viewportSettings.width, g_config.viewportSettings.height, 0.1f, 100.f);
     camera.SetPosition({30.f, 0.f, 30.f});
     camera.RotateToDirection(model.GetPosition() - camera.GetPosition());
 
-    auto lightDir = glm::vec3(0.5f, 0.5f, 0.f);
-
-    glClearColor(0.3f, 0.3f, 0.3f, 1.f);
-    glEnable(GL_DEPTH_TEST);
+    DirLight dirLight = DirLight();
+    dirLight.SetRotationByVector({ 0.5f, 0.5f, 0.f });
 
     while (!glfwWindowShouldClose(m_window))
     {
         glfwPollEvents();
 
-        shader.UseProgram();
-
-        shader.SetMat4Uniform("ModelMatrix", model.GetModelMatrix());
-        shader.SetMat4Uniform("ViewMatrix", camera.GetViewMatrix());
-        shader.SetMat4Uniform("ProjectionMatrix", camera.GetProjectionMatrix());
-        shader.SetVec3Uniform("LightDir", lightDir);
-
-        m_renderer->Draw(&model, &shader, &camera);
+        m_renderer->Draw(&model, &camera, &dirLight);
 
         glfwSwapBuffers(m_window);
     }
