@@ -39,6 +39,15 @@ void Application::Init()
     m_renderer = new Renderer();
     m_renderer->Init();
 
+    IMGUI_CHECKVERSION();
+    ImGui::CreateContext();
+    ImGuiIO& io = ImGui::GetIO(); (void)io;
+
+    ImGui::StyleColorsDark();
+
+    ImGui_ImplGlfw_InitForOpenGL(m_window, true);
+    ImGui_ImplOpenGL3_Init("#version 330 core");
+
     m_isInitialized = true;
 }
 
@@ -66,7 +75,18 @@ void Application::Start()
     {
         glfwPollEvents();
 
+        ImGui_ImplOpenGL3_NewFrame();
+        ImGui_ImplGlfw_NewFrame();
+        ImGui::NewFrame();
+
         m_renderer->Draw(&model, &camera, &dirLight);
+
+        ImGui::Begin("Demo window");
+        ImGui::Button("Hello!");
+        ImGui::End();
+
+        ImGui::Render();
+        ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
         glfwSwapBuffers(m_window);
     }
@@ -78,6 +98,12 @@ void Application::Shutdown()
 
     delete m_renderer;
     delete m_loader;
+
+    ImGui_ImplOpenGL3_Shutdown();
+    ImGui_ImplGlfw_Shutdown();
+    ImGui::DestroyContext();
+
+    glfwDestroyWindow(m_window);
     glfwTerminate();
 }
 

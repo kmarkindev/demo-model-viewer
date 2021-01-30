@@ -33,6 +33,7 @@ add_subdirectory(3rdparty)
 target_link_libraries(ModelViewer PRIVATE 
 	${GLFW_LIBRARIES}
 	GLAD
+	imgui
 	${ASSIMP_LIBRARIES}
 )
 

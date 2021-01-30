@@ -20,6 +20,9 @@
 #include <glm/matrix.hpp>
 #include <glm/gtx/quaternion.hpp>
 #include <glm/gtx/transform.hpp>
+#include <imgui_impl_glfw.h>
+#include <imgui_impl_opengl3.h>
+#include <imgui.h>
 
 extern Config g_config;
 
