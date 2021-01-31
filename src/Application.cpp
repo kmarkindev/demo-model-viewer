@@ -30,8 +30,9 @@ void Application::Init()
     }
 
     glfwSetWindowUserPointer(m_window, this);
-    glfwSetKeyCallback(m_window, KeyCallback);
     glfwSetCursorPosCallback(m_window, CursorPositionCallback);
+    glfwSetMouseButtonCallback(m_window, MouseButtonCallback);
+    glfwSetScrollCallback(m_window, ScrollCallback);
 
     m_loader = new AssimpLoader(aiProcess_Triangulate 
         | aiProcess_FlipUVs | aiProcess_PreTransformVertices);
@@ -55,21 +56,33 @@ void Application::Start()
 {
     CheckInitialization();
 
+    glm::vec3 startCameraPosition = glm::vec3(50.f, 0.f, 0.f);
+    glm::vec3 startLightDirection = glm::normalize(glm::vec3(0.5f, 0.f, 0.5f));
+    glm::vec3 startModelScale = glm::vec3(0.1f, 0.1f, 0.1f);
+    glm::vec3 startModelRotation = glm::vec3(0.f, 0.f, 0.f);
+    glm::vec4 startLightColor = glm::vec4(220.f / 255.f, 20.f / 255.f, 60.f / 255.f, 1.f);
+    float nearPlane = 0.1f;
+    float farPlane = 100.f;
+
     Shader shader = Shader(g_config.rootFolder + "/assets/shaders/basic_vertex.vert",
         g_config.rootFolder + "/assets/shaders/basic_fragment.frag");
     shader.LoadAndCompile();
 
-    Camera camera = Camera();
     Model model = m_loader->LoadModel(g_config.GetModelPath());
+    m_model = &model;
     model.SetShader(&shader);
-    model.SetScale({ 0.1f, 0.1f, 0.1f });
+    model.SetScale(startModelScale);
 
-    camera.SetPerspectiveMatrix(90, g_config.viewportSettings.width, g_config.viewportSettings.height, 0.1f, 100.f);
-    camera.SetPosition({30.f, 0.f, 30.f});
+    Camera camera = Camera();
+    m_camera = &camera;
+    camera.SetPerspectiveMatrix(90, g_config.viewportSettings.width,
+        g_config.viewportSettings.height, nearPlane, farPlane);
+    camera.SetPosition(startCameraPosition);
     camera.RotateToDirection(model.GetPosition() - camera.GetPosition());
 
     DirLight dirLight = DirLight();
-    dirLight.SetRotationByVector({ 0.5f, 0.5f, 0.f });
+    dirLight.RotateToDirection(startLightDirection);
+    dirLight.color = startLightColor;
 
     while (!glfwWindowShouldClose(m_window))
     {
@@ -81,8 +94,30 @@ void Application::Start()
 
         m_renderer->Draw(&model, &camera, &dirLight);
 
-        ImGui::Begin("Demo window");
-        ImGui::Button("Hello!");
+        ImGui::Begin("Menu");
+
+        ImGui::BeginChild("Actions", {0, 100});
+
+        if (ImGui::Button("Reset rotation"))
+        {
+            model.SetRotation(startModelRotation);
+        }
+
+        if (ImGui::Button("Reset zoom"))
+        {
+            model.SetScale(startModelScale);
+        }
+
+        ImGui::EndChild();
+
+        ImGui::BeginChild("Light Color");
+
+        float* color = &dirLight.color[0];
+        ImGui::ColorPicker4("Color picker", color);
+        dirLight.color = glm::vec4(color[0], color[1], color[2], color[3]);
+
+        ImGui::EndChild();
+
         ImGui::End();
 
         ImGui::Render();
@@ -120,14 +155,51 @@ void Application::CheckInitialization()
     }
 }
 
-void Application::KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods)
-{
-    void* data = glfwGetWindowUserPointer(window);
-    Application* app = static_cast<Application*>(data);
-}
-
 void Application::CursorPositionCallback(GLFWwindow* window, double xpos, double ypos)
 {
-    void* data = glfwGetWindowUserPointer(window);
-    Application* app = static_cast<Application*>(data);
+    Application* app = static_cast<Application*>(glfwGetWindowUserPointer(window));
+
+    static float lastx = 0;
+    static float lasty = 0;
+
+    float xoffset = xpos - lastx;
+    float yoffset = lasty - ypos;
+
+    lastx = xpos;
+    lasty = ypos;
+
+    if (!app->m_shouldRotate)
+    {
+        return;
+    }
+
+    app->m_model->RotateLocalByVector({ 0, xoffset * g_config.sensivitity, yoffset * g_config.sensivitity });
+}
+
+void Application::MouseButtonCallback(GLFWwindow* window, int button, int action, int mods)
+{
+    Application* app = static_cast<Application*>(glfwGetWindowUserPointer(window));
+
+    if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS)
+        app->m_shouldRotate = true;
+    else
+        app->m_shouldRotate = false;
+}
+
+void Application::ScrollCallback(GLFWwindow* window, double xoffset, double yoffset)
+{
+    Application* app = static_cast<Application*>(glfwGetWindowUserPointer(window));
+
+    float step = 1;
+
+    if (yoffset > 0)
+    {
+        step += g_config.scrollSensivitity;
+    }
+    else
+    {
+        step -= g_config.scrollSensivitity;
+    }
+
+    app->m_model->Scale({ step, step, step });
 }

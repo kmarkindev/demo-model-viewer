@@ -38,5 +38,6 @@ Config parseConfig(int argc, char* argv[])
     //params.modelPath = "/assets/models/men/men.fbx";
     params.rootFolder = appPath.substr(0, appPath.find_last_of("\\"));
 
+
     return params;
 }

@@ -36,10 +36,16 @@ private:
 	AssimpLoader* m_loader = nullptr;
 	Renderer* m_renderer = nullptr;
 
+	Camera* m_camera = nullptr;
+	Model* m_model = nullptr;
+
+	bool m_shouldRotate = false;
+
 	void CheckInitialization();
 
 	static void CursorPositionCallback(GLFWwindow* window, double xpos, double ypos);
-	static void KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods);
+	static void MouseButtonCallback(GLFWwindow* window, int button, int action, int mods);
+	static void ScrollCallback(GLFWwindow* window, double xoffset, double yoffset);
 
 public:
 

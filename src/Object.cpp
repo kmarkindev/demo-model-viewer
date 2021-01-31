@@ -31,9 +31,11 @@ void Object::SetRotation(glm::quat rotation)
 
 void Object::SetRotationByVector(glm::vec3 rotation)
 {
-	m_rotation = glm::angleAxis(glm::radians(rotation.x), glm::vec3(1.f, 0.f, 0.f))
-		* glm::angleAxis(glm::radians(rotation.y), glm::vec3(0.f, 1.f, 0.f))
-		* glm::angleAxis(glm::radians(rotation.z), glm::vec3(0.f, 0.f, 1.f));
+	rotation = glm::radians(rotation);
+
+	m_rotation = glm::angleAxis(rotation.x, glm::vec3(1.f, 0.f, 0.f))
+		* glm::angleAxis(rotation.y, glm::vec3(0.f, 1.f, 0.f))
+		* glm::angleAxis(rotation.z, glm::vec3(0.f, 0.f, 1.f));
 }
 
 glm::quat Object::GetRotation()
@@ -76,11 +78,23 @@ void Object::Rotate(glm::quat rotation)
 	m_rotation *= rotation;
 }
 
+void Object::RotateLocalByVector(glm::vec3 rotation)
+{
+	rotation = glm::radians(rotation);
+
+	m_rotation = glm::angleAxis(rotation.x, glm::vec3(1.f, 0.f, 0.f))
+		* glm::angleAxis(rotation.y, glm::vec3(0.f, 1.f, 0.f))
+		* glm::angleAxis(rotation.z, glm::vec3(0.f, 0.f, 1.f))
+		* m_rotation;
+}
+
 void Object::RotateByVector(glm::vec3 rotation)
 {
-	m_rotation *= glm::angleAxis(glm::radians(rotation.x), glm::vec3(1.f, 0.f, 0.f))
-		* glm::angleAxis(glm::radians(rotation.y), glm::vec3(0.f, 1.f, 0.f))
-		* glm::angleAxis(glm::radians(rotation.z), glm::vec3(0.f, 0.f, 1.f));
+	rotation = glm::radians(rotation);
+
+	m_rotation *= glm::angleAxis(rotation.x, glm::vec3(1.f, 0.f, 0.f))
+		* glm::angleAxis(rotation.y, glm::vec3(0.f, 1.f, 0.f))
+		* glm::angleAxis(rotation.z, glm::vec3(0.f, 0.f, 1.f));
 }
 
 void Object::RotateToDirection(glm::vec3 direction)

@@ -5,13 +5,23 @@ out vec4 color;
 in vec3 normalDir;
 
 uniform vec3 LightDir;
+uniform vec3 CameraDir;
+uniform mat4 ModelMatrix;
+uniform vec4 BaseColor;
 
 void main()
 {
-	vec3 lightDir = normalize(vec3(0.5f, 0.5f, 0.0f));
-	vec4 baseColor = vec4(255.0f / 255.0f, 127.0f / 255.0f, 80.0f / 255.0f, 1.0f);
+	vec3 normal = normalize(vec3(mat3(transpose(inverse(ModelMatrix))) * normalDir));
+	vec3 lightDir = normalize(LightDir);
 
-	float opacity = clamp(0.0f, 1.0f, dot(normalDir, lightDir) + 0.15f);
+	float diffuse = max(dot(normal, lightDir), 0.0f);
 
-	color = opacity * baseColor;
+	vec3 reflectDir = reflect(LightDir, normal);
+	float spec = pow(max(dot(CameraDir, reflectDir), 0.0), 32);
+
+	float specular = 0.5f * spec; 
+
+	float ambient = 0.05f;
+
+	color = (ambient + diffuse + specular) * BaseColor;
 }

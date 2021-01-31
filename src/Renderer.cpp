@@ -11,11 +11,13 @@ void Renderer::Draw(Model* model, Camera* camera, DirLight* light)
 	auto* shader = model->m_shader;
 
 	shader->UseProgram();
-
+	
 	shader->SetMat4Uniform("ModelMatrix", model->GetModelMatrix());
 	shader->SetMat4Uniform("ViewMatrix", camera->GetViewMatrix());
 	shader->SetMat4Uniform("ProjectionMatrix", camera->GetProjectionMatrix());
 	shader->SetVec3Uniform("LightDir", light->GetForwardVector());
+	shader->SetVec3Uniform("CameraDir", camera->GetForwardVector());
+	shader->SetVec4Uniform("BaseColor", light->color);
 
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
