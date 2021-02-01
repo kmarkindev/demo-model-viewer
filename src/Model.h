@@ -15,7 +15,7 @@ private:
 	friend class Renderer;
 
 	Shader* m_shader;
-	Material m_material;
+	Material* m_material;
 	std::vector<Mesh>* m_meshes;
 
 public:
@@ -23,7 +23,7 @@ public:
 	Model(std::vector<Mesh>* meshesm);
 	~Model();
 
-	void SetMaterial(Material material);
+	void SetMaterial(Material* material);
 	void SetShader(Shader* shader);
 
 };

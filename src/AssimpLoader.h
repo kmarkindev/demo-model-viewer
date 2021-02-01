@@ -15,7 +15,7 @@ public:
 
 	AssimpLoader(unsigned int importFlags);
 
-	Model LoadModel(std::string path);
+	Model* LoadModel(std::string path);
 
 private:
 

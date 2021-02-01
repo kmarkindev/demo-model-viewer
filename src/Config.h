@@ -24,9 +24,9 @@ public:
 
 	struct Viewport {
 		bool fullScreen = false;
-		int width = 800;
-		int height = 600;
-	} viewportSettings;
+		int width = 900;
+		int height = 900;
+	} viewport;
 
 	float sensivitity = 0.1f;
 	float scrollSensivitity = 0.1f;

@@ -7,13 +7,13 @@ void Application::Init()
         throw ApplicationInitializationException("GLFW init error");
     }
 
-    if (g_config.viewportSettings.fullScreen == true)
+    if (g_config.viewport.fullScreen == true)
     {
         m_monitor = glfwGetPrimaryMonitor();
     }
 
-    m_window = glfwCreateWindow(g_config.viewportSettings.width,
-        g_config.viewportSettings.height, g_config.windowTitle.c_str(), m_monitor, nullptr);
+    m_window = glfwCreateWindow(g_config.viewport.width,
+        g_config.viewport.height, g_config.windowTitle.c_str(), m_monitor, nullptr);
 
     if (!m_window)
     {
@@ -41,7 +41,7 @@ void Application::Init()
     m_renderer = new Renderer();
     m_renderer->Init();
     m_renderer->SetViewport(0, 0, 
-        g_config.viewportSettings.width, g_config.viewportSettings.height);
+        g_config.viewport.width, g_config.viewport.height);
 
     m_textureLoader = new TextureLoader();
 
@@ -61,41 +61,9 @@ void Application::Start()
 {
     CheckInitialization();
 
-    glm::vec3 startCameraPosition = glm::vec3(50.f, 0.f, 0.f);
-    glm::vec3 startLightDirection = glm::normalize(glm::vec3(0.5f, 0.f, 0.5f));
-    glm::vec3 startModelScale = glm::vec3(0.1f, 0.1f, 0.1f);
-    glm::vec3 startModelRotation = glm::vec3(0.f, 0.f, 0.f);
-    glm::vec4 startLightColor = glm::vec4(1.f, 1.f, 1.f, 1.f);
-    float nearPlane = g_config.camera.near;
-    float farPlane = g_config.camera.far;
-    float fov = g_config.camera.fov;
-
-    Shader shader = Shader(g_config.rootFolder + "/assets/shaders/basic_vertex.vert",
-        g_config.rootFolder + "/assets/shaders/basic_fragment.frag");
-    shader.LoadAndCompile();
-
-    Material material;
-    material.diffuse = m_textureLoader
-        ->LoadTexture(g_config.modelFolder + g_config.textures.diffuseName, TextureType::Diffuse);
-    material.specular = m_textureLoader
-        ->LoadTexture(g_config.modelFolder + g_config.textures.specularName, TextureType::Specular);
-
-    Model model = m_loader->LoadModel(g_config.GetModelPath());
-    m_model = &model;
-    model.SetShader(&shader);
-    model.SetScale(startModelScale);
-    model.SetMaterial(material);
-
-    Camera camera = Camera();
-    m_camera = &camera;
-    camera.SetPerspectiveMatrix(fov, g_config.viewportSettings.width,
-        g_config.viewportSettings.height, nearPlane, farPlane);
-    camera.SetPosition(startCameraPosition);
-    camera.RotateToDirection(model.GetPosition() - camera.GetPosition());
-
-    DirLight dirLight = DirLight();
-    dirLight.RotateToDirection(startLightDirection);
-    dirLight.color = startLightColor;
+    SetupModel();
+    SetupCamera();
+    SetupLight();
 
     while (!glfwWindowShouldClose(m_window))
     {
@@ -105,29 +73,29 @@ void Application::Start()
         ImGui_ImplGlfw_NewFrame();
         ImGui::NewFrame();
 
-        m_renderer->Draw(&model, &camera, &dirLight);
+        m_renderer->Draw(m_model, m_camera, m_light);
 
         ImGui::Begin("Menu");
 
-        ImGui::BeginChild("Actions", {0, 100});
+        ImGui::BeginChild("Actions", { 0, 100 });
 
         if (ImGui::Button("Reset rotation"))
         {
-            model.SetRotation(startModelRotation);
+            m_model->SetRotation(glm::quat(1.f, 0.f, 0.f, 0.f));
         }
 
         if (ImGui::Button("Reset zoom"))
         {
-            model.SetScale(startModelScale);
+            m_model->SetScale(m_startModelScale);
         }
 
         ImGui::EndChild();
 
         ImGui::BeginChild("Light Color");
 
-        float* color = &dirLight.color[0];
+        float* color = &m_light->color[0];
         ImGui::ColorPicker4("Color picker", color);
-        dirLight.color = glm::vec4(color[0], color[1], color[2], color[3]);
+        m_light->color = glm::vec4(color[0], color[1], color[2], color[3]);
 
         ImGui::EndChild();
 
@@ -167,6 +135,46 @@ void Application::CheckInitialization()
     {
         throw ApplicationNotInitializedException();
     }
+}
+
+void Application::SetupModel()
+{
+    Shader* shader = new Shader(g_config.rootFolder + "/assets/shaders/basic_vertex.vert",
+        g_config.rootFolder + "/assets/shaders/basic_fragment.frag");
+    shader->LoadAndCompile();
+
+    Material* material = new Material();
+    material->diffuse = m_textureLoader
+        ->LoadTexture(g_config.modelFolder + g_config.textures.diffuseName, TextureType::Diffuse);
+    material->specular = m_textureLoader
+        ->LoadTexture(g_config.modelFolder + g_config.textures.specularName, TextureType::Specular);
+
+    Model* model = m_loader->LoadModel(g_config.GetModelPath());
+    model->SetShader(shader);
+    model->SetScale(m_startModelScale);
+    model->SetMaterial(material);
+
+    m_model = model;
+}
+
+void Application::SetupCamera()
+{
+    Camera* camera = new Camera();
+    camera->SetPerspectiveMatrix(g_config.camera.fov, g_config.viewport.width,
+        g_config.viewport.height, g_config.camera.near, g_config.camera.far);
+    camera->SetPosition(m_startCameraPosition);
+    camera->RotateToDirection(m_model->GetPosition() - camera->GetPosition());
+
+    m_camera = camera;
+}
+
+void Application::SetupLight()
+{
+    DirLight* dirLight = new DirLight();
+    dirLight->RotateToDirection(m_startLightDirection);
+    dirLight->color = m_startLightColor;
+
+    m_light = dirLight;
 }
 
 void Application::CursorPositionCallback(GLFWwindow* window, double xpos, double ypos)

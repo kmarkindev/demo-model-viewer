@@ -5,7 +5,7 @@ AssimpLoader::AssimpLoader(unsigned int importFlags)
 {
 }
 
-Model AssimpLoader::LoadModel(std::string path)
+Model* AssimpLoader::LoadModel(std::string path)
 {
     const aiScene* scene = m_importer.ReadFile(path, m_importFlags);
     std::vector<Mesh>* meshes = new std::vector<Mesh>();
@@ -17,7 +17,7 @@ Model AssimpLoader::LoadModel(std::string path)
         meshes->push_back(mesh);
     }
 
-    return Model(meshes);
+    return new Model(meshes);
 }
 
 Mesh AssimpLoader::ProcessMesh(aiMesh* aiMesh, const aiScene* aiScene)

@@ -22,10 +22,10 @@ void Renderer::Draw(Model* model, Camera* camera, DirLight* light)
 	shader->SetIntUniform("specularTexture", 1);
 
 	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, model->m_material.diffuse.id);
+	glBindTexture(GL_TEXTURE_2D, model->m_material->diffuse.id);
 
 	glActiveTexture(GL_TEXTURE1);
-	glBindTexture(GL_TEXTURE_2D, model->m_material.specular.id);
+	glBindTexture(GL_TEXTURE_2D, model->m_material->specular.id);
 
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 

@@ -10,7 +10,7 @@ Model::~Model()
 	delete m_meshes;
 }
 
-void Model::SetMaterial(Material material)
+void Model::SetMaterial(Material* material)
 {
 	m_material = material;
 }
