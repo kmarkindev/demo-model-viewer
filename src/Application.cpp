@@ -45,14 +45,7 @@ void Application::Init()
 
     m_textureLoader = new TextureLoader();
 
-    IMGUI_CHECKVERSION();
-    ImGui::CreateContext();
-    m_imguiIo = &ImGui::GetIO();
-
-    ImGui::StyleColorsDark();
-
-    ImGui_ImplGlfw_InitForOpenGL(m_window, true);
-    ImGui_ImplOpenGL3_Init("#version 330 core");
+    InitImgui();
 
     m_isInitialized = true;
 }
@@ -69,40 +62,9 @@ void Application::Start()
     {
         glfwPollEvents();
 
-        ImGui_ImplOpenGL3_NewFrame();
-        ImGui_ImplGlfw_NewFrame();
-        ImGui::NewFrame();
-
         m_renderer->Draw(m_model, m_camera, m_light);
 
-        ImGui::Begin("Menu");
-
-        ImGui::BeginChild("Actions", { 0, 100 });
-
-        if (ImGui::Button("Reset rotation"))
-        {
-            m_model->SetRotation(glm::quat(1.f, 0.f, 0.f, 0.f));
-        }
-
-        if (ImGui::Button("Reset zoom"))
-        {
-            m_model->SetScale(m_startModelScale);
-        }
-
-        ImGui::EndChild();
-
-        ImGui::BeginChild("Light Color");
-
-        float* color = &m_light->color[0];
-        ImGui::ColorPicker4("Color picker", color);
-        m_light->color = glm::vec4(color[0], color[1], color[2], color[3]);
-
-        ImGui::EndChild();
-
-        ImGui::End();
-
-        ImGui::Render();
-        ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+        DrawImguiUi();
 
         glfwSwapBuffers(m_window);
     }
@@ -112,16 +74,19 @@ void Application::Shutdown()
 {
     CheckInitialization();
 
+    delete m_model;
+    delete m_camera;
+    delete m_light;
     delete m_renderer;
     delete m_loader;
     delete m_textureLoader;
 
-    ImGui_ImplOpenGL3_Shutdown();
-    ImGui_ImplGlfw_Shutdown();
-    ImGui::DestroyContext();
+    ShutdownImgui();
 
     glfwDestroyWindow(m_window);
     glfwTerminate();
+
+    m_isInitialized = false;
 }
 
 Application::Application(std::string modelPath)
@@ -175,6 +140,71 @@ void Application::SetupLight()
     dirLight->color = m_startLightColor;
 
     m_light = dirLight;
+}
+
+void Application::InitImgui()
+{
+    IMGUI_CHECKVERSION();
+    ImGui::CreateContext();
+    m_imguiIo = &ImGui::GetIO();
+
+    ImGui::StyleColorsDark();
+
+    ImGui_ImplGlfw_InitForOpenGL(m_window, true);
+    ImGui_ImplOpenGL3_Init("#version 330 core");
+}
+
+void Application::ShutdownImgui()
+{
+    ImGui_ImplOpenGL3_Shutdown();
+    ImGui_ImplGlfw_Shutdown();
+    ImGui::DestroyContext();
+}
+
+void Application::StartImguiFrame()
+{
+    ImGui_ImplOpenGL3_NewFrame();
+    ImGui_ImplGlfw_NewFrame();
+    ImGui::NewFrame();
+}
+
+void Application::EndImgueFrame()
+{
+    ImGui::Render();
+    ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+}
+
+void Application::DrawImguiUi()
+{
+    StartImguiFrame();
+
+    ImGui::Begin("Menu");
+
+    ImGui::BeginChild("Actions", { 0, 50 });
+
+    if (ImGui::Button("Reset rotation"))
+    {
+        m_model->SetRotation(glm::quat(1.f, 0.f, 0.f, 0.f));
+    }
+
+    if (ImGui::Button("Reset zoom"))
+    {
+        m_model->SetScale(m_startModelScale);
+    }
+
+    ImGui::EndChild();
+
+    ImGui::BeginChild("Light Color");
+
+    float* color = &m_light->color[0];
+    ImGui::ColorPicker4("Color picker", color);
+    m_light->color = glm::vec4(color[0], color[1], color[2], color[3]);
+
+    ImGui::EndChild();
+
+    ImGui::End();
+
+    EndImgueFrame();
 }
 
 void Application::CursorPositionCallback(GLFWwindow* window, double xpos, double ypos)

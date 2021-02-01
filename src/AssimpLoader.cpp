@@ -17,6 +17,8 @@ Model* AssimpLoader::LoadModel(std::string path)
         meshes->push_back(mesh);
     }
 
+    m_importer.FreeScene();
+
     return new Model(meshes);
 }
 

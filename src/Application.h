@@ -57,6 +57,12 @@ private:
 	void SetupCamera();
 	void SetupLight();
 
+	void InitImgui();
+	void ShutdownImgui();
+	void StartImguiFrame();
+	void EndImgueFrame();
+	void DrawImguiUi();
+
 	static void CursorPositionCallback(GLFWwindow* window, double xpos, double ypos);
 	static void MouseButtonCallback(GLFWwindow* window, int button, int action, int mods);
 	static void ScrollCallback(GLFWwindow* window, double xoffset, double yoffset);
