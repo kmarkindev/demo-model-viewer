@@ -44,7 +44,7 @@ void Application::Init()
 
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
-    ImGuiIO& io = ImGui::GetIO(); (void)io;
+    m_imguiIo = &ImGui::GetIO();
 
     ImGui::StyleColorsDark();
 
@@ -62,7 +62,7 @@ void Application::Start()
     glm::vec3 startLightDirection = glm::normalize(glm::vec3(0.5f, 0.f, 0.5f));
     glm::vec3 startModelScale = glm::vec3(0.1f, 0.1f, 0.1f);
     glm::vec3 startModelRotation = glm::vec3(0.f, 0.f, 0.f);
-    glm::vec4 startLightColor = glm::vec4(220.f / 255.f, 20.f / 255.f, 60.f / 255.f, 1.f);
+    glm::vec4 startLightColor = glm::vec4(1.f, 1.f, 1.f, 1.f);
     float nearPlane = 0.1f;
     float farPlane = 100.f;
 
@@ -177,7 +177,7 @@ void Application::CursorPositionCallback(GLFWwindow* window, double xpos, double
     lastx = xpos;
     lasty = ypos;
 
-    if (!app->m_shouldRotate)
+    if (!app->m_shouldRotate || app->m_imguiIo->WantCaptureMouse)
     {
         return;
     }

@@ -40,6 +40,7 @@ private:
 
 	Camera* m_camera = nullptr;
 	Model* m_model = nullptr;
+	ImGuiIO* m_imguiIo;
 
 	bool m_shouldRotate = false;
 
