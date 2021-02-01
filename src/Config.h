@@ -8,6 +8,7 @@ public:
 
 	std::string rootFolder;
 	std::string modelPath;
+	std::string modelFolder;
 	std::string windowTitle = "DEMO: model viewer";
 
 	struct ViewportSettings {

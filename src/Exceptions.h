@@ -122,3 +122,11 @@ struct CannotLoadModel : public CustomException
 		return "Cannot load given modal from path: " + m_path;
 	}
 };
+
+struct CannotLoadTexture : public CustomException
+{
+	const std::string GetMessage() const noexcept override
+	{
+		return "Cannot load texture exception";
+	}
+};

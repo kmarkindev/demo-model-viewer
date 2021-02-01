@@ -22,4 +22,6 @@ target_sources(ModelViewer PRIVATE
 	Renderer.cpp
 	DirLight.h
 	DirLight.cpp
+	TextureLoader.h
+	TextureLoader.cpp
 )

@@ -40,6 +40,8 @@ void Application::Init()
     m_renderer = new Renderer();
     m_renderer->Init();
 
+    m_textureLoader = new TextureLoader();
+
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
     ImGuiIO& io = ImGui::GetIO(); (void)io;
@@ -68,10 +70,17 @@ void Application::Start()
         g_config.rootFolder + "/assets/shaders/basic_fragment.frag");
     shader.LoadAndCompile();
 
+    Material material;
+    material.diffuse = m_textureLoader
+        ->LoadTexture(g_config.modelFolder + "1001_albedo.jpg", TextureType::Diffuse);
+    material.specular = m_textureLoader
+        ->LoadTexture(g_config.modelFolder + "1001_metallic.jpg", TextureType::Specular);
+
     Model model = m_loader->LoadModel(g_config.GetModelPath());
     m_model = &model;
     model.SetShader(&shader);
     model.SetScale(startModelScale);
+    model.SetMaterial(material);
 
     Camera camera = Camera();
     m_camera = &camera;

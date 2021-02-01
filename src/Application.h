@@ -23,6 +23,7 @@
 #include <imgui_impl_glfw.h>
 #include <imgui_impl_opengl3.h>
 #include <imgui.h>
+#include "TextureLoader.h"
 
 extern Config g_config;
 
@@ -34,6 +35,7 @@ private:
 	GLFWmonitor* m_monitor = nullptr;
 	bool m_isInitialized = false;
 	AssimpLoader* m_loader = nullptr;
+	TextureLoader* m_textureLoader = nullptr;
 	Renderer* m_renderer = nullptr;
 
 	Camera* m_camera = nullptr;
