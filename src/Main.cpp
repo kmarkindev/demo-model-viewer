@@ -36,9 +36,13 @@ Config parseConfig(int argc, char* argv[])
     //params.modelPath = "/assets/models/cube.obj";
     params.modelPath = "/assets/models/backpack/Survival_BackPack_2.fbx";
     //params.modelPath = "/assets/models/men/men.fbx";
-    params.rootFolder = appPath.substr(0, appPath.find_last_of("\\"));
-    params.modelFolder = params.rootFolder + "/assets/models/backpack/";
 
+    params.textures.diffuseName = "1001_albedo.jpg";
+    params.textures.specularName = "1001_metallic.jpg";
+
+    params.rootFolder = appPath.substr(0, appPath.find_last_of("\\"));
+    params.modelFolder = params.rootFolder
+        + params.modelPath.substr(0, params.modelPath.find_last_of("/")) + "/";
 
     return params;
 }

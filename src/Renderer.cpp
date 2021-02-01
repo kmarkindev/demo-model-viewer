@@ -46,3 +46,8 @@ void Renderer::Draw(Model* model, Camera* camera, DirLight* light)
 void Renderer::Shutdown()
 {
 }
+
+void Renderer::SetViewport(GLint x, GLint y, GLint width, GLint height)
+{
+	glViewport(x, y, width, height);
+}

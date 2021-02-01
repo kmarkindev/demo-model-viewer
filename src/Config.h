@@ -11,7 +11,18 @@ public:
 	std::string modelFolder;
 	std::string windowTitle = "DEMO: model viewer";
 
-	struct ViewportSettings {
+	struct Textures {
+		std::string diffuseName;
+		std::string specularName;	
+	} textures;
+
+	struct Camera {
+		float fov = 90;
+		float near = 0.1f;
+		float far = 100.f;
+	} camera;
+
+	struct Viewport {
 		bool fullScreen = false;
 		int width = 800;
 		int height = 600;

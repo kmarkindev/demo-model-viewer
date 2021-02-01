@@ -33,12 +33,15 @@ void Application::Init()
     glfwSetCursorPosCallback(m_window, CursorPositionCallback);
     glfwSetMouseButtonCallback(m_window, MouseButtonCallback);
     glfwSetScrollCallback(m_window, ScrollCallback);
+    glfwSetWindowSizeCallback(m_window, WindowSizeCallback);
 
     m_loader = new AssimpLoader(aiProcess_Triangulate 
         | aiProcess_FlipUVs | aiProcess_PreTransformVertices);
 
     m_renderer = new Renderer();
     m_renderer->Init();
+    m_renderer->SetViewport(0, 0, 
+        g_config.viewportSettings.width, g_config.viewportSettings.height);
 
     m_textureLoader = new TextureLoader();
 
@@ -63,8 +66,9 @@ void Application::Start()
     glm::vec3 startModelScale = glm::vec3(0.1f, 0.1f, 0.1f);
     glm::vec3 startModelRotation = glm::vec3(0.f, 0.f, 0.f);
     glm::vec4 startLightColor = glm::vec4(1.f, 1.f, 1.f, 1.f);
-    float nearPlane = 0.1f;
-    float farPlane = 100.f;
+    float nearPlane = g_config.camera.near;
+    float farPlane = g_config.camera.far;
+    float fov = g_config.camera.fov;
 
     Shader shader = Shader(g_config.rootFolder + "/assets/shaders/basic_vertex.vert",
         g_config.rootFolder + "/assets/shaders/basic_fragment.frag");
@@ -72,9 +76,9 @@ void Application::Start()
 
     Material material;
     material.diffuse = m_textureLoader
-        ->LoadTexture(g_config.modelFolder + "1001_albedo.jpg", TextureType::Diffuse);
+        ->LoadTexture(g_config.modelFolder + g_config.textures.diffuseName, TextureType::Diffuse);
     material.specular = m_textureLoader
-        ->LoadTexture(g_config.modelFolder + "1001_metallic.jpg", TextureType::Specular);
+        ->LoadTexture(g_config.modelFolder + g_config.textures.specularName, TextureType::Specular);
 
     Model model = m_loader->LoadModel(g_config.GetModelPath());
     m_model = &model;
@@ -84,7 +88,7 @@ void Application::Start()
 
     Camera camera = Camera();
     m_camera = &camera;
-    camera.SetPerspectiveMatrix(90, g_config.viewportSettings.width,
+    camera.SetPerspectiveMatrix(fov, g_config.viewportSettings.width,
         g_config.viewportSettings.height, nearPlane, farPlane);
     camera.SetPosition(startCameraPosition);
     camera.RotateToDirection(model.GetPosition() - camera.GetPosition());
@@ -142,6 +146,7 @@ void Application::Shutdown()
 
     delete m_renderer;
     delete m_loader;
+    delete m_textureLoader;
 
     ImGui_ImplOpenGL3_Shutdown();
     ImGui_ImplGlfw_Shutdown();
@@ -166,7 +171,7 @@ void Application::CheckInitialization()
 
 void Application::CursorPositionCallback(GLFWwindow* window, double xpos, double ypos)
 {
-    Application* app = static_cast<Application*>(glfwGetWindowUserPointer(window));
+    Application* app = GetInstancePointer(window);
 
     static float lastx = 0;
     static float lasty = 0;
@@ -187,7 +192,7 @@ void Application::CursorPositionCallback(GLFWwindow* window, double xpos, double
 
 void Application::MouseButtonCallback(GLFWwindow* window, int button, int action, int mods)
 {
-    Application* app = static_cast<Application*>(glfwGetWindowUserPointer(window));
+    Application* app = GetInstancePointer(window);
 
     if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS)
         app->m_shouldRotate = true;
@@ -197,7 +202,12 @@ void Application::MouseButtonCallback(GLFWwindow* window, int button, int action
 
 void Application::ScrollCallback(GLFWwindow* window, double xoffset, double yoffset)
 {
-    Application* app = static_cast<Application*>(glfwGetWindowUserPointer(window));
+    Application* app = GetInstancePointer(window);
+
+    if (app->m_imguiIo->WantCaptureMouse)
+    {
+        return;
+    }
 
     float step = 1;
 
@@ -211,4 +221,19 @@ void Application::ScrollCallback(GLFWwindow* window, double xoffset, double yoff
     }
 
     app->m_model->Scale({ step, step, step });
+}
+
+void Application::WindowSizeCallback(GLFWwindow* window, int width, int height)
+{
+    Application* app = GetInstancePointer(window);
+
+    app->m_camera->SetPerspectiveMatrix(g_config.camera.fov,
+        width, height, g_config.camera.near, g_config.camera.far);
+
+    app->m_renderer->SetViewport(0, 0, width, height);
+}
+
+Application* Application::GetInstancePointer(GLFWwindow* window)
+{
+    return static_cast<Application*>(glfwGetWindowUserPointer(window));
 }

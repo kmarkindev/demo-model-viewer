@@ -45,10 +45,12 @@ private:
 	bool m_shouldRotate = false;
 
 	void CheckInitialization();
-
+	
 	static void CursorPositionCallback(GLFWwindow* window, double xpos, double ypos);
 	static void MouseButtonCallback(GLFWwindow* window, int button, int action, int mods);
 	static void ScrollCallback(GLFWwindow* window, double xoffset, double yoffset);
+	static void WindowSizeCallback(GLFWwindow* window, int width, int height);
+	static Application* GetInstancePointer(GLFWwindow* window);
 
 public:
 

@@ -16,5 +16,6 @@ public:
 	void Init();
 	void Draw(Model* model, Camera* camera, DirLight* light);
 	void Shutdown();
+	void SetViewport(GLint x, GLint y, GLint width, GLint height);
 
 };
