@@ -40,6 +40,9 @@ Config parseConfig(int argc, char* argv[])
     params.textures.diffuseName = "1001_albedo.jpg";
     params.textures.specularName = "1001_metallic.jpg";
 
+    //params.textures.diffuseName = "GAP_2DAE03_Moldovan_Alexia_C.png";
+    //params.textures.specularName = "GAP_2DAE03_Moldovan_Alexia_M.png";
+
     params.rootFolder = appPath.substr(0, appPath.find_last_of("\\"));
     params.modelFolder = params.rootFolder
         + params.modelPath.substr(0, params.modelPath.find_last_of("/")) + "/";

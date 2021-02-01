@@ -28,7 +28,7 @@ public:
 		int height = 900;
 	} viewport;
 
-	float sensivitity = 0.1f;
+	float sensivitity = 0.3f;
 	float scrollSensivitity = 0.1f;
 
 	std::string GetModelPath();

@@ -180,8 +180,6 @@ void Application::DrawImguiUi()
 
     ImGui::Begin("Menu");
 
-    ImGui::BeginChild("Actions", { 0, 50 });
-
     if (ImGui::Button("Reset rotation"))
     {
         m_model->SetRotation(glm::quat(1.f, 0.f, 0.f, 0.f));
@@ -192,15 +190,12 @@ void Application::DrawImguiUi()
         m_model->SetScale(m_startModelScale);
     }
 
-    ImGui::EndChild();
-
-    ImGui::BeginChild("Light Color");
-
-    float* color = &m_light->color[0];
-    ImGui::ColorPicker4("Color picker", color);
-    m_light->color = glm::vec4(color[0], color[1], color[2], color[3]);
-
-    ImGui::EndChild();
+    if (ImGui::CollapsingHeader("Light Color"))
+    {
+        float* color = &m_light->color[0];
+        ImGui::ColorPicker4("Color picker", color);
+        m_light->color = glm::vec4(color[0], color[1], color[2], color[3]);
+    }
 
     ImGui::End();
 
