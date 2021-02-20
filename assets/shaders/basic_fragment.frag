@@ -15,20 +15,22 @@ uniform sampler2D specularTexture;
 
 void main()
 {
-	vec3 baseColor = vec3(texture(diffuseTexture, texCoords));
+	vec4 baseColor = texture(diffuseTexture, texCoords);
 	vec3 specularSense = vec3(texture(specularTexture, texCoords));
+
+	color = baseColor;
 
 	vec3 normal = normalize(vec3(mat3(transpose(inverse(ModelMatrix))) * normalDir));
 	vec3 lightDir = normalize(LightDir);
 
 	float diffuseOpacity = max(dot(normal, lightDir), 0.0f);
-	vec3 diffuse = diffuseOpacity * LightColor * baseColor;
+	vec3 diffuse = diffuseOpacity * LightColor;
 
 	vec3 reflectDir = reflect(LightDir, normal);
 	float spec = pow(max(dot(CameraDir, reflectDir), 0.0), 32);
 	vec3 specular = specularSense * LightColor * spec; 
 
-	vec3 ambient = baseColor * 0.05f;
+	float ambient = 0.05f;
 
-	color = vec4(ambient + diffuse + specular, 1.0f);
+	color = vec4((ambient + diffuse + specular) * baseColor.rgb, baseColor.a);
 }

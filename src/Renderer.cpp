@@ -4,6 +4,9 @@ void Renderer::Init()
 {
 	glClearColor(0.3f, 0.3f, 0.3f, 1.f);
 	glEnable(GL_DEPTH_TEST);
+
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);  
 }
 
 void Renderer::Draw(Model* model, Camera* camera, DirLight* light)
