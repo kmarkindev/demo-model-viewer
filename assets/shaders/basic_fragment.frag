@@ -23,8 +23,9 @@ void main()
 	float diffuseOpacity = max(dot(normal, lightDir), 0.0f);
 	vec3 diffuse = diffuseOpacity * LightColor;
 
-	vec3 reflectDir = reflect(LightDir, normal);
-	float spec = pow(max(dot(CameraDir, reflectDir), 0.0), 32);
+	vec3 halfVector = normalize(lightDir + CameraDir);
+
+	float spec = pow(max(dot(CameraDir, halfVector), 0.0), 32);
 	vec3 specular = specularSense * LightColor * spec; 
 
 	float ambient = 0.05f;
