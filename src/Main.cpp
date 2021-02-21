@@ -31,7 +31,7 @@ Config parseConfig(int argc, char* argv[])
     std::string appPath = std::string(argv[0]);
 
     Config params;
-
+    
     params.modelPath = "/assets/models/backpack/Survival_BackPack_2.fbx";
     params.textures.diffuseName = "1001_albedo.jpg";
     params.textures.specularName = "1001_metallic.jpg";

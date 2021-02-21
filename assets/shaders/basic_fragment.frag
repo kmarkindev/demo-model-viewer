@@ -8,7 +8,6 @@ in vec2 texCoords;
 uniform vec3 LightDir;
 uniform vec3 LightColor;
 uniform vec3 CameraDir;
-uniform mat4 ModelMatrix;
 
 uniform sampler2D diffuseTexture;
 uniform sampler2D specularTexture;
@@ -18,9 +17,7 @@ void main()
 	vec4 baseColor = texture(diffuseTexture, texCoords);
 	vec3 specularSense = vec3(texture(specularTexture, texCoords));
 
-	color = baseColor;
-
-	vec3 normal = normalize(vec3(mat3(transpose(inverse(ModelMatrix))) * normalDir));
+	vec3 normal = normalDir;
 	vec3 lightDir = normalize(LightDir);
 
 	float diffuseOpacity = max(dot(normal, lightDir), 0.0f);

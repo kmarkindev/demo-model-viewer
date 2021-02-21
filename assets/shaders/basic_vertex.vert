@@ -13,7 +13,7 @@ out vec2 texCoords;
 
 void main()
 {
-	normalDir = normal;
+	normalDir = normalize(vec3(mat3(transpose(inverse(ModelMatrix))) * normal));
 	texCoords = textureCoords;
 	gl_Position = ProjectionMatrix * ViewMatrix * ModelMatrix * vec4(verticle.xyz, 1.0f);
 }
