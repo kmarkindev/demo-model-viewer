@@ -32,7 +32,7 @@ void Renderer::Draw(Model* model, Camera* camera, DirLight* light)
 
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	for each (Mesh mesh in model->m_meshes[0])
+	for (Mesh mesh : model->m_meshes[0])
 	{
 		glBindVertexArray(mesh.m_meshData.vao);
 		glDrawElements(GL_TRIANGLES, mesh.m_meshData.dataLength, GL_UNSIGNED_INT, 0);

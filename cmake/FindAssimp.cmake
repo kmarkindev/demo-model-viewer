@@ -27,7 +27,7 @@ if (WIN32)
 	# Find library files
 	find_library(
 		ASSIMP_LIBRARY
-		NAMES assimp-vc142-mt
+		NAMES assimp
 		PATHS
 			$ENV{PROGRAMFILES}/Assimp/lib
 			${ASSIMP_ROOT_DIR}/lib)
