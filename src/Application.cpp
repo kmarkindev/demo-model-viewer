@@ -150,6 +150,8 @@ void Application::InitImgui()
     ImGui::CreateContext();
     m_imguiIo = &ImGui::GetIO();
 
+    m_imguiIo->IniFilename = nullptr;
+
     ImGui::StyleColorsDark();
 
     ImGui_ImplGlfw_InitForOpenGL(m_window, true);
@@ -180,29 +182,66 @@ void Application::DrawImguiUi()
 {
     StartImguiFrame();
 
+    ImGui::SetNextWindowBgAlpha(m_menuAlpha);
+
     ImGui::Begin("Menu");
 
-    if (ImGui::Button("Reset rotation"))
+    if(ImGui::CollapsingHeader("Actions"))
     {
-        m_model->SetRotation(glm::quat(1.f, 0.f, 0.f, 0.f));
+        if (ImGui::Button("Reset rotation"))
+        {
+            m_model->SetRotation(glm::quat(1.f, 0.f, 0.f, 0.f));
+        }
+
+        ImGui::SameLine();
+
+        if (ImGui::Button("Reset zoom"))
+        {
+            m_model->SetScale(m_startModelScale);
+        }
     }
 
-    if (ImGui::Button("Reset zoom"))
+    if(ImGui::CollapsingHeader("Anti Aliasing"))
     {
-        m_model->SetScale(m_startModelScale);
+        bool enableAA = m_renderer->IsAntiAliasingEnabled();
+        if (ImGui::Checkbox("Enabled##AA_Enabled", &enableAA))
+        {
+            m_renderer->ToggleAntiAliasing(enableAA);
+        }
     }
 
-    bool enableAA = m_renderer->IsAntiAliasingEnabled();
-    if (ImGui::Checkbox("Anti Aliasing", &enableAA))
+    if (ImGui::CollapsingHeader("Face culling"))
     {
-        m_renderer->ToggleAntiAliasing(enableAA);
+        bool enableFaceCulling = m_renderer->IsFaceCullingEnabled();
+        if (ImGui::Checkbox("Enabled##FC_enabled", &enableFaceCulling)) 
+        {
+            m_renderer->ToggleFaceCulling(enableFaceCulling);
+        }
+
+        bool radioChanged = false;
+        int value = (int)m_renderer->GetFaceCullingMode();
+        radioChanged |= ImGui::RadioButton("Front", &value, 0);
+        ImGui::SameLine();
+        radioChanged |= ImGui::RadioButton("Back", &value, 1);
+        ImGui::SameLine();
+        radioChanged |= ImGui::RadioButton("Front and back", &value, 2);
+
+        if(radioChanged)
+        {
+            m_renderer->SetFaceCullingMode((CullingMode)value);
+        }
     }
 
-    if (ImGui::CollapsingHeader("Light Color"))
+    if (ImGui::CollapsingHeader("Light"))
     {
         float* color = &m_light->color[0];
-        ImGui::ColorPicker4("Color picker", color);
+        ImGui::ColorPicker4("Light color", color);
         m_light->color = glm::vec4(color[0], color[1], color[2], color[3]);
+    }
+
+    if(ImGui::CollapsingHeader("Menu settings"))
+    {
+        ImGui::SliderFloat("Menu Opacity", &m_menuAlpha, 0.f, 1.f);
     }
 
     ImGui::End();

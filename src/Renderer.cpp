@@ -6,6 +6,7 @@ void Renderer::Init()
 	glEnable(GL_DEPTH_TEST);
 
 	ToggleAntiAliasing(true);
+	ToggleFaceCulling(true);
 
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);  
@@ -71,7 +72,52 @@ void Renderer::ToggleAntiAliasing(bool status)
 	m_isAntiAliasingEnabled = status;
 }
 
+void Renderer::ToggleFaceCulling(bool status) 
+{
+	if(status)
+	{
+		glEnable(GL_CULL_FACE);
+	}
+	else
+	{
+		glDisable(GL_CULL_FACE);
+	}
+
+	m_isFaceCullingEnabled = status;
+}
+
+void Renderer::SetFaceCullingMode(CullingMode mode) 
+{
+	glCullFace(GetGlCullingMode(mode));
+	m_faceCullingMode = mode;
+}
+
 bool Renderer::IsAntiAliasingEnabled()
 {
 	return m_isAntiAliasingEnabled;
+}
+
+bool Renderer::IsFaceCullingEnabled() 
+{
+	return m_isFaceCullingEnabled;
+}
+
+CullingMode Renderer::GetFaceCullingMode() 
+{
+	return m_faceCullingMode;
+}
+
+GLenum Renderer::GetGlCullingMode(CullingMode mode) 
+{
+	switch (mode)
+	{
+	case CullingMode::FRONT:
+		return GL_FRONT;
+	case CullingMode::BACK:
+		return GL_BACK;
+	case CullingMode::FRONT_AND_BACK:
+		return GL_FRONT_AND_BACK;
+	}
+
+	throw new CannotConvertException();
 }

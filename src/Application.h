@@ -51,6 +51,8 @@ private:
 
 	bool m_shouldRotate = false;
 
+	float m_menuAlpha = 1.f;
+
 	void CheckInitialization();
 	
 	void SetupModel();

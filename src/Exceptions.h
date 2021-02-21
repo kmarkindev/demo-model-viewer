@@ -130,3 +130,11 @@ struct CannotLoadTexture : public CustomException
 		return "Cannot load texture exception";
 	}
 };
+
+struct CannotConvertException : public CustomException
+{
+	const std::string GetMessage() const noexcept override
+	{
+		return "Cannot convert exception";
+	}
+};
