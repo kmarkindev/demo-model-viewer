@@ -5,6 +5,8 @@ void Renderer::Init()
 	glClearColor(0.3f, 0.3f, 0.3f, 1.f);
 	glEnable(GL_DEPTH_TEST);
 
+	ToggleAntiAliasing(true);
+
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);  
 }
@@ -53,4 +55,23 @@ void Renderer::Shutdown()
 void Renderer::SetViewport(GLint x, GLint y, GLint width, GLint height)
 {
 	glViewport(x, y, width, height);
+}
+
+void Renderer::ToggleAntiAliasing(bool status)
+{
+	if(status)
+	{
+		glEnable(GL_MULTISAMPLE);
+	}
+	else
+	{
+		glDisable(GL_MULTISAMPLE);
+	}
+
+	m_isAntiAliasingEnabled = status;
+}
+
+bool Renderer::IsAntiAliasingEnabled()
+{
+	return m_isAntiAliasingEnabled;
 }

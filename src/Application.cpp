@@ -7,6 +7,8 @@ void Application::Init()
         throw ApplicationInitializationException("GLFW init error");
     }
 
+    glfwWindowHint(GLFW_SAMPLES, 4);
+
     if (g_config.viewport.fullScreen == true)
     {
         m_monitor = glfwGetPrimaryMonitor();
@@ -188,6 +190,12 @@ void Application::DrawImguiUi()
     if (ImGui::Button("Reset zoom"))
     {
         m_model->SetScale(m_startModelScale);
+    }
+
+    bool enableAA = m_renderer->IsAntiAliasingEnabled();
+    if (ImGui::Checkbox("Anti Aliasing", &enableAA))
+    {
+        m_renderer->ToggleAntiAliasing(enableAA);
     }
 
     if (ImGui::CollapsingHeader("Light Color"))

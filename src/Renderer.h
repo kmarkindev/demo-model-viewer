@@ -9,7 +9,7 @@ class Renderer
 {
 private:
 
-
+	bool m_isAntiAliasingEnabled = false;
 
 public:
 
@@ -17,5 +17,8 @@ public:
 	void Draw(Model* model, Camera* camera, DirLight* light);
 	void Shutdown();
 	void SetViewport(GLint x, GLint y, GLint width, GLint height);
+	void ToggleAntiAliasing(bool status);
+
+	bool IsAntiAliasingEnabled();
 
 };
