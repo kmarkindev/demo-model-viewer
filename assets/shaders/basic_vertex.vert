@@ -10,10 +10,19 @@ uniform mat4 ProjectionMatrix;
 
 out vec3 normalDir;
 out vec2 texCoords;
+out vec3 fragPos;
+out mat3 NormalMatrix;
 
 void main()
 {
-	normalDir = normalize(vec3(mat3(transpose(inverse(ModelMatrix))) * normal));
+	normalDir = normal;
 	texCoords = textureCoords;
-	gl_Position = ProjectionMatrix * ViewMatrix * ModelMatrix * vec4(verticle.xyz, 1.0f);
+
+	NormalMatrix = mat3(transpose(inverse(ViewMatrix * ModelMatrix)));
+
+	vec4 vertPosition = ViewMatrix * ModelMatrix * vec4(verticle.xyz, 1.0f);
+
+	fragPos = vertPosition.xyz;
+	
+	gl_Position = ProjectionMatrix * vertPosition;
 }
