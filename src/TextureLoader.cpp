@@ -16,7 +16,7 @@ Texture TextureLoader::LoadTexture(std::string path, TextureType type)
 
 	glBindTexture(GL_TEXTURE_2D, id);
 
-	if(channels == 3)
+	if(true || channels == 3) //Disable blending for some time
 	{
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
 

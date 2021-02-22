@@ -26,7 +26,7 @@ void Renderer::Draw(Model* model, Camera* camera, DirLight* light)
 	
 	shader->SetIntUniform("diffuseTexture", 0);
 	shader->SetIntUniform("specularTexture", 1);
-
+	
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, model->m_material->diffuse.id);
 

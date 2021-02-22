@@ -21,7 +21,7 @@ void main()
 
 	vec3 normal = normalize(vec3(NormalMatrix * normalDir));
 	vec3 viewDir = normalize(fragPos - vec3(0,0,0));
-	vec3 lightDir = normalize(vec3(ViewMatrix * vec4(LightDir, 0.f)));
+	vec3 lightDir = normalize(vec3(ViewMatrix * vec4(normalize(LightDir), 0.f)));
 
 	vec3 ambientColor = 0.05f * LightColor;
 
