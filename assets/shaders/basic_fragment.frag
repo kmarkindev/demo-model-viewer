@@ -29,7 +29,7 @@ void main()
 	vec3 diffuseColor = diffuse * baseColor.rgb * LightColor;
 
 	vec3 halfVector = normalize(-viewDir + -viewDir);
-	float specular = pow(max(dot(normal, halfVector), 0.0f), 32.f);
+	float specular = pow(max(dot(normal, halfVector), 0.0f), 16.f);
 	vec3 specularColor = specular * specularValue * LightColor;
 
 	color = vec4(ambientColor + diffuseColor + specularColor, baseColor.a);

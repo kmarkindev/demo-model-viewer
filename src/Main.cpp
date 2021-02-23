@@ -35,10 +35,6 @@ Config parseConfig(int argc, char* argv[])
     params.modelPath = "/assets/models/backpack/Survival_BackPack_2.fbx";
     params.textures.diffuseName = "1001_albedo.jpg";
     params.textures.specularName = "1001_metallic.jpg";
-    
-    // params.modelPath = "/assets/models/container/cube.obj";
-    // params.textures.diffuseName = "container2_diffuse.png";
-    // params.textures.specularName = "container2_specular.png";
 
     // params.modelPath = "/assets/models/derringer22/derringer.fbx";
     // params.textures.diffuseName = "GAP_2DAE03_Moldovan_Alexia_C.png";
