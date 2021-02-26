@@ -62,11 +62,7 @@ void Application::Start()
     SetupShader();
     SetupCamera();
     SetupLight();
-
-    SetupModel(m_assetsManager->GetAssetPath({"models", "backpack", "Survival_BackPack_2.fbx"}));
-    LoadTexture(m_assetsManager->GetAssetPath({"models", "backpack", "1001_albedo.jpg"}), TextureType::Diffuse);
-    LoadTexture(m_assetsManager->GetAssetPath({"models", "backpack", "1001_metallic.jpg"}), TextureType::Specular);
-
+    
     while (!glfwWindowShouldClose(m_window))
     {
         glfwPollEvents();
@@ -113,10 +109,13 @@ void Application::SetupShader()
     m_shader->LoadAndCompile();
 }
 
-void Application::SetupModel(std::string path)
+void Application::LoadModel(std::string path)
 {
     if(m_model)
+    {
         m_model->Unload();
+        delete m_model;
+    }
 
     m_model = m_loader->LoadModel(path);
     m_model->SetShader(m_shader);
@@ -199,6 +198,22 @@ void Application::DrawImguiUi()
     ImGui::SetNextWindowBgAlpha(m_menuAlpha);
 
     ImGui::Begin("Menu");
+
+    
+    if(ImGui::Button("Load model"))
+        ImGuiFileDialog::Instance()
+            ->OpenDialog("ChooseModelFile", "Choose model", ".fbx,.obj", ".");
+
+    if (ImGuiFileDialog::Instance()->Display("ChooseModelFile")) 
+    {
+        if (ImGuiFileDialog::Instance()->IsOk())
+        {
+            std::string modelPath = ImGuiFileDialog::Instance()->GetFilePathName();
+            LoadModel(modelPath);
+        }
+    
+        ImGuiFileDialog::Instance()->Close();
+    }
 
     if(ImGui::CollapsingHeader("Actions"))
     {

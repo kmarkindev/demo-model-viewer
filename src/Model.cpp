@@ -27,10 +27,13 @@ void Model::SetShader(Shader* shader)
 
 void Model::Unload() 
 {
-	m_material->UnloadMaterial();
+	// m_material->UnloadMaterial();
 
-	for(auto mesh : m_meshes[0])
-	{
-		mesh.Unload();
-	}
+	// for(auto mesh : m_meshes[0])
+	// {
+	// 	mesh.Unload();
+	// }
+
+	// delete m_meshes;
+	// delete m_material;
 }

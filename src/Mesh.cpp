@@ -20,4 +20,8 @@ void Mesh::Unload()
 	
 	if(m_meshData.vbo != 0)
 		glDeleteBuffers(1, &m_meshData.vbo);
+
+	m_meshData.ebo = 0;
+	m_meshData.vao = 0;
+	m_meshData.ebo = 0;
 }

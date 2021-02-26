@@ -67,7 +67,7 @@ private:
 	void CheckInitialization();
 	
 	void SetupShader();
-	void SetupModel(std::string path);
+	void LoadModel(std::string path);
 	void LoadTexture(std::string path, TextureType type);
 	void SetupCamera();
 	void SetupLight();
