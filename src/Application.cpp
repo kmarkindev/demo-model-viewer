@@ -303,6 +303,8 @@ void Application::DrawImguiUi()
 
     if (ImGui::CollapsingHeader("Light"))
     {
+        ImGui::DragFloat("Shiness", &m_light->shiness, 0.5f, 1.f);
+
         float* color = &m_light->color[0];
         ImGui::ColorPicker4("Light color", color);
         m_light->color = glm::vec4(color[0], color[1], color[2], color[3]);

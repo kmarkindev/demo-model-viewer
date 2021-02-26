@@ -29,6 +29,7 @@ void Renderer::Draw(Model* model, Camera* camera, DirLight* light)
 	shader->SetMat4Uniform("ProjectionMatrix", camera->GetProjectionMatrix());
 	shader->SetVec3Uniform("LightDir", light->GetForwardVector());
 	shader->SetVec3Uniform("LightColor", light->color);
+	shader->SetFloatUniform("LightShiness", light->shiness);
 	
 	shader->SetIntUniform("diffuseTexture", 0);
 	shader->SetIntUniform("specularTexture", 1);

@@ -10,6 +10,7 @@ in mat3 NormalMatrix;
 uniform vec3 LightDir;
 uniform vec3 LightColor;
 uniform mat4 ViewMatrix;
+uniform float LightShiness;
 
 uniform sampler2D diffuseTexture;
 uniform sampler2D specularTexture;
@@ -29,7 +30,7 @@ void main()
 	vec3 diffuseColor = diffuse * baseColor * LightColor;
 
 	vec3 halfVector = normalize(-viewDir + -viewDir);
-	float specular = pow(max(dot(normal, halfVector), 0.0f), 16.f);
+	float specular = pow(max(dot(normal, halfVector), 0.0f), LightShiness);
 	vec3 specularColor = specular * specularValue * LightColor;
 
 	color = vec4(ambientColor + diffuseColor + specularColor, 1.0f);
