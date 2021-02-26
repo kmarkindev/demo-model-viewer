@@ -12,4 +12,6 @@ struct Texture
 {
 	TextureType type;
 	GLuint id;
+
+	void Unload();
 };

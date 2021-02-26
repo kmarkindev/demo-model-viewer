@@ -37,11 +37,12 @@ private:
 	TextureLoader* m_textureLoader = nullptr;
 	Renderer* m_renderer = nullptr;
 	AssetsManager* m_assetsManager = nullptr;
+	ImGuiIO* m_imguiIo;
 
 	Camera* m_camera = nullptr;
 	Model* m_model = nullptr;
 	DirLight* m_light = nullptr;
-	ImGuiIO* m_imguiIo;
+	Shader* m_shader = nullptr;
 
 	glm::vec3 m_startCameraPosition = glm::vec3(30.f, 0.f, 0.f);
 	glm::vec4 m_startLightColor = glm::vec4(1.f, 1.f, 1.f, 1.f);
@@ -64,9 +65,13 @@ private:
 
 	void CheckInitialization();
 	
-	void SetupModel();
+	void SetupShader();
+	void SetupModel(std::string path);
+	void LoadTexture(std::string path, TextureType type);
 	void SetupCamera();
 	void SetupLight();
+
+	void UnloadCurrentModel();
 
 	void InitImgui();
 	void ShutdownImgui();

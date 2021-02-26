@@ -33,5 +33,6 @@ private:
 public:
 
 	Mesh(MeshData meshData);
+	void Unload();
 
 };

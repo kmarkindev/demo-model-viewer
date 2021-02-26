@@ -12,6 +12,10 @@ target_sources(ModelViewer PRIVATE
 	Mesh.cpp
 	Model.h
 	Model.cpp
+	Material.h
+	Material.cpp
+	Texture.h
+	Texture.cpp
 	Camera.h
 	Camera.cpp
 	Object.h

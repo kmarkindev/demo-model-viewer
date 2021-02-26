@@ -23,7 +23,10 @@ public:
 	Model(std::vector<Mesh>* meshesm);
 	~Model();
 
+	Material* GetMaterial();
 	void SetMaterial(Material* material);
 	void SetShader(Shader* shader);
+
+	void Unload();
 
 };

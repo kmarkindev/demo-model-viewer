@@ -59,9 +59,13 @@ void Application::Start()
 {
     CheckInitialization();
 
-    SetupModel();
+    SetupShader();
     SetupCamera();
     SetupLight();
+
+    SetupModel(m_assetsManager->GetAssetPath({"models", "backpack", "Survival_BackPack_2.fbx"}));
+    LoadTexture(m_assetsManager->GetAssetPath({"models", "backpack", "1001_albedo.jpg"}), TextureType::Diffuse);
+    LoadTexture(m_assetsManager->GetAssetPath({"models", "backpack", "1001_metallic.jpg"}), TextureType::Specular);
 
     while (!glfwWindowShouldClose(m_window))
     {
@@ -102,24 +106,34 @@ void Application::CheckInitialization()
     }
 }
 
-void Application::SetupModel()
+void Application::SetupShader() 
 {
-    Shader* shader = new Shader(m_assetsManager->GetAssetPath({"shaders", "basic_vertex.vert"}),
+    m_shader = new Shader(m_assetsManager->GetAssetPath({"shaders", "basic_vertex.vert"}),
         m_assetsManager->GetAssetPath({"shaders", "basic_fragment.frag"}));
-    shader->LoadAndCompile();
+    m_shader->LoadAndCompile();
+}
 
-    // Material* material = new Material();
-    // material->diffuse = m_textureLoader
-    //     ->LoadTexture(g_config.modelFolder + g_config.textures.diffuseName, TextureType::Diffuse);
-    // material->specular = m_textureLoader
-    //     ->LoadTexture(g_config.modelFolder + g_config.textures.specularName, TextureType::Specular);
+void Application::SetupModel(std::string path)
+{
+    if(m_model)
+        m_model->Unload();
 
-    // Model* model = m_loader->LoadModel(g_config.GetModelPath());
-    // model->SetShader(shader);
-    // model->SetScale(m_startModelScale);
-    // model->SetMaterial(material);
+    m_model = m_loader->LoadModel(path);
+    m_model->SetShader(m_shader);
+    m_model->SetScale(m_startModelScale);
+    m_model->SetMaterial(new Material());
+}
 
-    // m_model = model;
+void Application::LoadTexture(std::string path, TextureType type) 
+{
+    if(!m_model)
+        throw CannotSetTexture();
+    
+    Texture texture = m_textureLoader
+        ->LoadTexture(path, type);
+
+    Material* material =  m_model->GetMaterial();
+    material->ReplaceTexture(texture, type);
 }
 
 void Application::SetupCamera()

@@ -10,6 +10,11 @@ Model::~Model()
 	delete m_meshes;
 }
 
+Material* Model::GetMaterial() 
+{
+	return m_material;
+}
+
 void Model::SetMaterial(Material* material)
 {
 	m_material = material;
@@ -18,4 +23,14 @@ void Model::SetMaterial(Material* material)
 void Model::SetShader(Shader* shader)
 {
 	m_shader = shader;
+}
+
+void Model::Unload() 
+{
+	m_material->UnloadMaterial();
+
+	for(auto mesh : m_meshes[0])
+	{
+		mesh.Unload();
+	}
 }
