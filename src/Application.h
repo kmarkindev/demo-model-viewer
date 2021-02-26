@@ -25,6 +25,7 @@
 #include <filesystem>
 #include "TextureLoader.h"
 #include "AssetsManager.h"
+#include <ImGuiFileDialog.h>
 
 class Application 
 {

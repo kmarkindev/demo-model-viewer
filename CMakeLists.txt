@@ -37,6 +37,7 @@ target_link_libraries(ModelViewer PRIVATE
 	${GLFW_LIBRARIES}
 	GLAD
 	imgui
+	imguiFileDialog
 	${ASSIMP_LIBRARIES}
 )
 
