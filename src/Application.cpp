@@ -131,7 +131,7 @@ void Application::LoadTexture(std::string path, TextureType type)
     Texture texture = m_textureLoader
         ->LoadTexture(path, type);
 
-    Material* material =  m_model->GetMaterial();
+    Material* material = m_model->GetMaterial();
     material->ReplaceTexture(texture, type);
 }
 

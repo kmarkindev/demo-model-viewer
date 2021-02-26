@@ -16,7 +16,7 @@ uniform sampler2D specularTexture;
 
 void main()
 {
-	vec4 baseColor = texture(diffuseTexture, texCoords);
+	vec3 baseColor = texture(diffuseTexture, texCoords).rgb;
 	vec3 specularValue = texture(specularTexture, texCoords).rgb;
 
 	vec3 normal = normalize(vec3(NormalMatrix * normalDir));
@@ -26,11 +26,11 @@ void main()
 	vec3 ambientColor = 0.05f * LightColor;
 
 	float diffuse = max(dot(normal, lightDir), 0.0f);
-	vec3 diffuseColor = diffuse * baseColor.rgb * LightColor;
+	vec3 diffuseColor = diffuse * baseColor * LightColor;
 
 	vec3 halfVector = normalize(-viewDir + -viewDir);
 	float specular = pow(max(dot(normal, halfVector), 0.0f), 16.f);
 	vec3 specularColor = specular * specularValue * LightColor;
 
-	color = vec4(ambientColor + diffuseColor + specularColor, baseColor.a);
+	color = vec4(ambientColor + diffuseColor + specularColor, 1.0f);
 }
