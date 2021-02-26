@@ -12,7 +12,6 @@
 #include <assimp/postprocess.h>
 #include "Shader.h"
 #include "Exceptions.h"
-#include "Config.h"
 #include "AssimpLoader.h"
 #include "Camera.h"
 #include "Renderer.h"
@@ -23,21 +22,21 @@
 #include <imgui_impl_glfw.h>
 #include <imgui_impl_opengl3.h>
 #include <imgui.h>
+#include <filesystem>
 #include "TextureLoader.h"
-
-extern Config g_config;
+#include "AssetsManager.h"
 
 class Application 
 {
 private:
 
-	std::string m_modelPath = "";
 	GLFWwindow* m_window = nullptr;
 	GLFWmonitor* m_monitor = nullptr;
 	bool m_isInitialized = false;
 	AssimpLoader* m_loader = nullptr;
 	TextureLoader* m_textureLoader = nullptr;
 	Renderer* m_renderer = nullptr;
+	AssetsManager* m_assetsManager = nullptr;
 
 	Camera* m_camera = nullptr;
 	Model* m_model = nullptr;
@@ -48,6 +47,16 @@ private:
 	glm::vec4 m_startLightColor = glm::vec4(1.f, 1.f, 1.f, 1.f);
 	glm::vec3 m_startModelScale = glm::vec3(0.1f, 0.1f, 0.1f);
 	glm::vec3 m_startLightDirection = glm::vec3(1.0, 0.f, 0.0f);
+
+	int m_startWidth = 900;
+	int m_startHeight = 900;
+	float m_startFov = 90;
+	float m_startNear = 0.1f;
+	float m_startFar = 100.f;
+	bool m_isFullscreenOnStart = false;
+	std::string m_startWindowTitle = "DEMO: model viewer";
+	float m_startSensivitity = 0.3f;
+	float m_startScrollSensivitity = 0.1f;
 
 	bool m_shouldRotate = false;
 
@@ -72,9 +81,8 @@ private:
 	static Application* GetInstancePointer(GLFWwindow* window);
 
 public:
-
-	Application(std::string modelPath);
-	void Init();
+	
+	void Init(int argc, char* argv[]);
 	void Start();
 	void Shutdown();
 };

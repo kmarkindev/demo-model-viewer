@@ -14,7 +14,10 @@ set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake)
 add_executable(ModelViewer)
 add_subdirectory(src)
 
-set(CXX_STANDARD_REQUIRED 20)
+set_target_properties(ModelViewer PROPERTIES
+    CXX_STANDARD 17
+    CXX_STANDARD_REQUIRED ON
+)
 
 # copy assets to the dist folder after build
 add_custom_command(TARGET ModelViewer POST_BUILD

@@ -3,8 +3,6 @@ target_sources(ModelViewer PRIVATE
 	Application.cpp
 	Application.h
 	Exceptions.h
-	Config.h
-	Config.cpp
 	stb_image.h
 	Shader.h
 	Shader.cpp
@@ -24,4 +22,6 @@ target_sources(ModelViewer PRIVATE
 	DirLight.cpp
 	TextureLoader.h
 	TextureLoader.cpp
+	AssetsManager.h
+	AssetsManager.cpp
 )

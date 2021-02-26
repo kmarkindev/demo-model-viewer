@@ -14,6 +14,12 @@ void Renderer::Init()
 
 void Renderer::Draw(Model* model, Camera* camera, DirLight* light)
 {
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	
+	if(!model){
+		return;
+	}
+
 	auto* shader = model->m_shader;
 
 	shader->UseProgram();
@@ -32,8 +38,6 @@ void Renderer::Draw(Model* model, Camera* camera, DirLight* light)
 
 	glActiveTexture(GL_TEXTURE1);
 	glBindTexture(GL_TEXTURE_2D, model->m_material->specular.id);
-
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	for (Mesh mesh : model->m_meshes[0])
 	{

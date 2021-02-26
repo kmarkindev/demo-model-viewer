@@ -1,6 +1,6 @@
 #include "Application.h"
 
-void Application::Init()
+void Application::Init(int argc, char* argv[])
 {
     if (!glfwInit())
     {
@@ -9,13 +9,13 @@ void Application::Init()
 
     glfwWindowHint(GLFW_SAMPLES, 4);
 
-    if (g_config.viewport.fullScreen == true)
+    if (m_isFullscreenOnStart == true)
     {
         m_monitor = glfwGetPrimaryMonitor();
     }
 
-    m_window = glfwCreateWindow(g_config.viewport.width,
-        g_config.viewport.height, g_config.windowTitle.c_str(), m_monitor, nullptr);
+    m_window = glfwCreateWindow(m_startWidth,
+        m_startHeight, m_startWindowTitle.c_str(), m_monitor, nullptr);
 
     if (!m_window)
     {
@@ -37,13 +37,16 @@ void Application::Init()
     glfwSetScrollCallback(m_window, ScrollCallback);
     glfwSetWindowSizeCallback(m_window, WindowSizeCallback);
 
+    std::string rootFolder = std::filesystem::path(argv[0]).parent_path().string();
+    m_assetsManager = new AssetsManager(rootFolder);
+
     m_loader = new AssimpLoader(aiProcess_Triangulate 
         | aiProcess_FlipUVs | aiProcess_PreTransformVertices);
 
     m_renderer = new Renderer();
     m_renderer->Init();
     m_renderer->SetViewport(0, 0, 
-        g_config.viewport.width, g_config.viewport.height);
+        m_startWidth, m_startHeight);
 
     m_textureLoader = new TextureLoader();
 
@@ -91,11 +94,6 @@ void Application::Shutdown()
     m_isInitialized = false;
 }
 
-Application::Application(std::string modelPath)
-    : m_modelPath(modelPath)
-{
-}
-
 void Application::CheckInitialization()
 {
     if (!m_isInitialized)
@@ -106,31 +104,33 @@ void Application::CheckInitialization()
 
 void Application::SetupModel()
 {
-    Shader* shader = new Shader(g_config.rootFolder + "/assets/shaders/basic_vertex.vert",
-        g_config.rootFolder + "/assets/shaders/basic_fragment.frag");
+    Shader* shader = new Shader(m_assetsManager->GetAssetPath({"shaders", "basic_vertex.vert"}),
+        m_assetsManager->GetAssetPath({"shaders", "basic_fragment.frag"}));
     shader->LoadAndCompile();
 
-    Material* material = new Material();
-    material->diffuse = m_textureLoader
-        ->LoadTexture(g_config.modelFolder + g_config.textures.diffuseName, TextureType::Diffuse);
-    material->specular = m_textureLoader
-        ->LoadTexture(g_config.modelFolder + g_config.textures.specularName, TextureType::Specular);
+    // Material* material = new Material();
+    // material->diffuse = m_textureLoader
+    //     ->LoadTexture(g_config.modelFolder + g_config.textures.diffuseName, TextureType::Diffuse);
+    // material->specular = m_textureLoader
+    //     ->LoadTexture(g_config.modelFolder + g_config.textures.specularName, TextureType::Specular);
 
-    Model* model = m_loader->LoadModel(g_config.GetModelPath());
-    model->SetShader(shader);
-    model->SetScale(m_startModelScale);
-    model->SetMaterial(material);
+    // Model* model = m_loader->LoadModel(g_config.GetModelPath());
+    // model->SetShader(shader);
+    // model->SetScale(m_startModelScale);
+    // model->SetMaterial(material);
 
-    m_model = model;
+    // m_model = model;
 }
 
 void Application::SetupCamera()
 {
+    glm::vec3 modelPosition = m_model ? m_model->GetPosition() : glm::vec3(0,0,0);
+
     Camera* camera = new Camera();
-    camera->SetPerspectiveMatrix(g_config.camera.fov, g_config.viewport.width,
-        g_config.viewport.height, g_config.camera.near, g_config.camera.far);
+    camera->SetPerspectiveMatrix(m_startFov, m_startWidth,
+        m_startHeight, m_startNear, m_startFar);
     camera->SetPosition(m_startCameraPosition);
-    camera->RotateToDirection(m_model->GetPosition() - camera->GetPosition());
+    camera->RotateToDirection(modelPosition - camera->GetPosition());
 
     m_camera = camera;
 }
@@ -190,14 +190,16 @@ void Application::DrawImguiUi()
     {
         if (ImGui::Button("Reset rotation"))
         {
-            m_model->SetRotation(glm::quat(1.f, 0.f, 0.f, 0.f));
+            if(m_model)
+                m_model->SetRotation(glm::quat(1.f, 0.f, 0.f, 0.f));
         }
 
         ImGui::SameLine();
 
         if (ImGui::Button("Reset zoom"))
         {
-            m_model->SetScale(m_startModelScale);
+            if(m_model)
+                m_model->SetScale(m_startModelScale);
         }
     }
 
@@ -253,6 +255,9 @@ void Application::CursorPositionCallback(GLFWwindow* window, double xpos, double
 {
     Application* app = GetInstancePointer(window);
 
+    if(!app->m_model)
+        return;
+
     static float lastx = 0;
     static float lasty = 0;
 
@@ -267,7 +272,7 @@ void Application::CursorPositionCallback(GLFWwindow* window, double xpos, double
         return;
     }
 
-    app->m_model->RotateLocalByVector({ 0, xoffset * g_config.sensivitity, yoffset * g_config.sensivitity });
+    app->m_model->RotateLocalByVector({ 0, xoffset * app->m_startSensivitity, yoffset * app->m_startSensivitity });
 }
 
 void Application::MouseButtonCallback(GLFWwindow* window, int button, int action, int mods)
@@ -284,6 +289,9 @@ void Application::ScrollCallback(GLFWwindow* window, double xoffset, double yoff
 {
     Application* app = GetInstancePointer(window);
 
+    if(!app->m_model)
+        return;
+
     if (app->m_imguiIo->WantCaptureMouse)
     {
         return;
@@ -293,11 +301,11 @@ void Application::ScrollCallback(GLFWwindow* window, double xoffset, double yoff
 
     if (yoffset > 0)
     {
-        step += g_config.scrollSensivitity;
+        step += app->m_startScrollSensivitity;
     }
     else
     {
-        step -= g_config.scrollSensivitity;
+        step -= app->m_startScrollSensivitity;
     }
 
     app->m_model->Scale({ step, step, step });
@@ -307,8 +315,8 @@ void Application::WindowSizeCallback(GLFWwindow* window, int width, int height)
 {
     Application* app = GetInstancePointer(window);
 
-    app->m_camera->SetPerspectiveMatrix(g_config.camera.fov,
-        width, height, g_config.camera.near, g_config.camera.far);
+    app->m_camera->SetPerspectiveMatrix(app->m_startFov,
+        width, height, app->m_startNear, app->m_startFar);
 
     app->m_renderer->SetViewport(0, 0, width, height);
 }
