@@ -199,17 +199,55 @@ void Application::DrawImguiUi()
 
     ImGui::Begin("Menu");
 
-    
-    if(ImGui::Button("Load model"))
-        ImGuiFileDialog::Instance()
-            ->OpenDialog("ChooseModelFile", "Choose model", ".fbx,.obj", ".");
+    if(ImGui::CollapsingHeader("Assets"))
+    {
+        if(ImGui::Button("Load model"))
+            ImGuiFileDialog::Instance()
+                ->OpenDialog("ChooseModel", "Choose model", ".fbx,.obj", ".");
 
-    if (ImGuiFileDialog::Instance()->Display("ChooseModelFile")) 
+        if(m_model){
+             ImGui::SameLine();
+
+            if(ImGui::Button("Load diffuse"))
+                ImGuiFileDialog::Instance()
+                    ->OpenDialog("ChooseDiffuse", "Choose texture", ".png,.jpg,.jpeg", ".");
+
+            ImGui::SameLine();
+
+            if(ImGui::Button("Load specular"))
+                ImGuiFileDialog::Instance()
+                    ->OpenDialog("ChooseSpecular", "Choose texture", ".png,.jpg,.jpeg", ".");
+        }
+    }
+
+    if (ImGuiFileDialog::Instance()->Display("ChooseModel")) 
     {
         if (ImGuiFileDialog::Instance()->IsOk())
         {
             std::string modelPath = ImGuiFileDialog::Instance()->GetFilePathName();
             LoadModel(modelPath);
+        }
+    
+        ImGuiFileDialog::Instance()->Close();
+    }
+
+    if (ImGuiFileDialog::Instance()->Display("ChooseDiffuse")) 
+    {
+        if (ImGuiFileDialog::Instance()->IsOk())
+        {
+            std::string path = ImGuiFileDialog::Instance()->GetFilePathName();
+            LoadTexture(path, TextureType::Diffuse);
+        }
+    
+        ImGuiFileDialog::Instance()->Close();
+    }
+
+    if (ImGuiFileDialog::Instance()->Display("ChooseSpecular")) 
+    {
+        if (ImGuiFileDialog::Instance()->IsOk())
+        {
+            std::string path = ImGuiFileDialog::Instance()->GetFilePathName();
+            LoadTexture(path, TextureType::Specular);
         }
     
         ImGuiFileDialog::Instance()->Close();
