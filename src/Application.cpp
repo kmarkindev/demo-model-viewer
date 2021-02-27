@@ -200,7 +200,7 @@ void Application::DrawImguiUi()
     ImGui::SetNextWindowBgAlpha(m_menuAlpha);
 
     ImGui::Begin("Menu");
-    
+
     if(ImGui::CollapsingHeader("Assets"))
     {
         if(ImGui::Button("Load model"))
@@ -257,7 +257,7 @@ void Application::DrawImguiUi()
 
     if(ImGui::CollapsingHeader("Actions"))
     {
-        if (ImGui::Button("Reset rotation"))
+        if (ImGui::Button("Reset camera position"))
         {
             glm::vec3 modelPosition = m_model ? m_model->GetPosition() : glm::vec3(0,0,0);
             
@@ -269,7 +269,7 @@ void Application::DrawImguiUi()
 
         ImGui::SameLine();
 
-        if (ImGui::Button("Reset zoom"))
+        if (ImGui::Button("Reset camera distance"))
         {
             if(m_model)
                 m_model->SetScale(m_startModelScale);
@@ -379,18 +379,8 @@ void Application::ScrollCallback(GLFWwindow* window, double xoffset, double yoff
         return;
     }
 
-    float step = 1;
-
-    if (yoffset > 0)
-    {
-        step += app->m_startScrollSensivitity;
-    }
-    else
-    {
-        step -= app->m_startScrollSensivitity;
-    }
-
-    app->m_model->Scale({ step, step, step });
+    auto direction = app->m_camera->GetForwardVector();
+    app->m_camera->Move(direction * app->m_startScrollSensivitity * (float)glm::sign(yoffset));
 }
 
 void Application::WindowSizeCallback(GLFWwindow* window, int width, int height)

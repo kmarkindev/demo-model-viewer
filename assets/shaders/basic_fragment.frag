@@ -24,14 +24,14 @@ void main()
 	vec3 viewDir = normalize(fragPos - vec3(0,0,0));
 	vec3 lightDir = normalize(vec3(ViewMatrix * vec4(normalize(LightDir), 0.f)));
 
-	vec3 ambientColor = 0.05f * LightColor;
+	vec3 ambientColor = 0.05f * LightColor * baseColor;
 
 	float diffuse = max(dot(normal, lightDir), 0.0f);
 	vec3 diffuseColor = diffuse * baseColor * LightColor;
-
-	vec3 halfVector = normalize(-viewDir + -viewDir);
+	
+	vec3 halfVector = normalize(-viewDir + -lightDir);
 	float specular = pow(max(dot(normal, halfVector), 0.0f), LightShiness);
-	vec3 specularColor = specular * specularValue * LightColor;
-
+	vec3 specularColor = specular * specularValue * LightColor * baseColor;
+	
 	color = vec4(ambientColor + diffuseColor + specularColor, 1.0f);
 }
