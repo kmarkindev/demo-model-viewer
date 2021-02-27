@@ -45,7 +45,7 @@ private:
 	DirLight* m_light = nullptr;
 	Shader* m_shader = nullptr;
 
-	glm::vec3 m_startCameraPosition = glm::vec3(30.f, 0.f, 0.f);
+	glm::vec3 m_startCameraPosition = glm::vec3(0.f, 100.f, 0.f);
 	glm::vec4 m_startLightColor = glm::vec4(1.f, 1.f, 1.f, 1.f);
 	glm::vec3 m_startModelScale = glm::vec3(0.1f, 0.1f, 0.1f);
 	glm::vec3 m_startLightDirection = glm::vec3(1.0, 0.f, 0.0f);
@@ -54,9 +54,9 @@ private:
 	int m_startHeight = 900;
 	float m_startFov = 90;
 	float m_startNear = 0.1f;
-	float m_startFar = 100.f;
+	float m_startFar = 300.f;
 	bool m_isFullscreenOnStart = false;
-	std::string m_startWindowTitle = "DEMO: model viewer";
+	std::string m_startWindowTitle = "DEMO: Model Viewer";
 	float m_startSensivitity = 0.3f;
 	float m_startScrollSensivitity = 0.1f;
 

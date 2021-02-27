@@ -62,6 +62,10 @@ void Application::Start()
     SetupShader();
     SetupCamera();
     SetupLight();
+
+    LoadModel(m_assetsManager->GetAssetPath({"models", "backpack", "Survival_BackPack_2.fbx"}));
+    LoadTexture(m_assetsManager->GetAssetPath({"models", "backpack","1001_albedo.jpg"}), TextureType::Diffuse);
+    LoadTexture(m_assetsManager->GetAssetPath({"models", "backpack", "1001_metallic.jpg"}), TextureType::Specular);
     
     while (!glfwWindowShouldClose(m_window))
     {
@@ -139,13 +143,11 @@ void Application::SetupCamera()
 {
     glm::vec3 modelPosition = m_model ? m_model->GetPosition() : glm::vec3(0,0,0);
 
-    Camera* camera = new Camera();
-    camera->SetPerspectiveMatrix(m_startFov, m_startWidth,
+    m_camera = new Camera();
+    m_camera->SetPerspectiveMatrix(m_startFov, m_startWidth,
         m_startHeight, m_startNear, m_startFar);
-    camera->SetPosition(m_startCameraPosition);
-    camera->RotateToDirection(modelPosition - camera->GetPosition());
-
-    m_camera = camera;
+    m_camera->SetPosition(m_startCameraPosition);
+    m_camera->RotateToDirection(modelPosition - m_camera->GetPosition());
 }
 
 void Application::SetupLight()
@@ -198,7 +200,7 @@ void Application::DrawImguiUi()
     ImGui::SetNextWindowBgAlpha(m_menuAlpha);
 
     ImGui::Begin("Menu");
-
+    
     if(ImGui::CollapsingHeader("Assets"))
     {
         if(ImGui::Button("Load model"))
@@ -257,8 +259,12 @@ void Application::DrawImguiUi()
     {
         if (ImGui::Button("Reset rotation"))
         {
-            if(m_model)
-                m_model->SetRotation(glm::quat(1.f, 0.f, 0.f, 0.f));
+            glm::vec3 modelPosition = m_model ? m_model->GetPosition() : glm::vec3(0,0,0);
+            
+            m_camera->SetPerspectiveMatrix(m_startFov, m_startWidth,
+                m_startHeight, m_startNear, m_startFar);
+            m_camera->SetPosition(m_startCameraPosition);
+            m_camera->RotateToDirection(modelPosition - m_camera->GetPosition());
         }
 
         ImGui::SameLine();
@@ -341,7 +347,14 @@ void Application::CursorPositionCallback(GLFWwindow* window, double xpos, double
         return;
     }
 
-    app->m_model->RotateLocalByVector({ 0, xoffset * app->m_startSensivitity, yoffset * app->m_startSensivitity });
+    auto cameraUp = app->m_camera->GetUpVector();
+    auto cameraRight = app->m_camera->GetRightVector();
+    auto modelPos = app->m_model->GetPosition();
+
+    app->m_camera->RotateAround(modelPos, cameraUp, xoffset * -app->m_startSensivitity);
+    app->m_camera->RotateAround(modelPos, cameraRight, yoffset * -app->m_startSensivitity);
+
+    app->m_camera->RotateToDirection(modelPos - app->m_camera->GetPosition());
 }
 
 void Application::MouseButtonCallback(GLFWwindow* window, int button, int action, int mods)
