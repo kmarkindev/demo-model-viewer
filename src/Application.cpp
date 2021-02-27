@@ -316,6 +316,12 @@ void Application::DrawImguiUi()
         m_light->color = glm::vec4(color[0], color[1], color[2], color[3]);
     }
 
+    if(ImGui::CollapsingHeader("Camera"))
+    {
+        ImGui::DragFloat("Mouse sensivitity", &m_sensivitity, 0.1f, 0);
+        ImGui::DragFloat("Scroll sensivitity", &m_scrollSensivitity, 0.1f, 0);
+    }
+
     if(ImGui::CollapsingHeader("Menu settings"))
     {
         ImGui::SliderFloat("Menu Opacity", &m_menuAlpha, 0.f, 1.f);
@@ -351,8 +357,8 @@ void Application::CursorPositionCallback(GLFWwindow* window, double xpos, double
     auto cameraRight = app->m_camera->GetRightVector();
     auto modelPos = app->m_model->GetPosition();
 
-    app->m_camera->RotateAround(modelPos, cameraUp, xoffset * -app->m_startSensivitity);
-    app->m_camera->RotateAround(modelPos, cameraRight, yoffset * -app->m_startSensivitity);
+    app->m_camera->RotateAround(modelPos, cameraUp, xoffset * -app->m_sensivitity);
+    app->m_camera->RotateAround(modelPos, cameraRight, yoffset * -app->m_sensivitity);
 
     app->m_camera->RotateToDirection(modelPos - app->m_camera->GetPosition());
 }
@@ -380,7 +386,7 @@ void Application::ScrollCallback(GLFWwindow* window, double xoffset, double yoff
     }
 
     auto direction = app->m_camera->GetForwardVector();
-    app->m_camera->Move(direction * app->m_startScrollSensivitity * (float)glm::sign(yoffset));
+    app->m_camera->Move(direction * app->m_scrollSensivitity * (float)glm::sign(yoffset));
 }
 
 void Application::WindowSizeCallback(GLFWwindow* window, int width, int height)

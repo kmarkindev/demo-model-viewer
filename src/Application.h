@@ -57,8 +57,8 @@ private:
 	float m_startFar = 300.f;
 	bool m_isFullscreenOnStart = false;
 	std::string m_startWindowTitle = "DEMO: Model Viewer";
-	float m_startSensivitity = 0.3f;
-	float m_startScrollSensivitity = 1.f;
+	float m_sensivitity = 0.3f;
+	float m_scrollSensivitity = 1.f;
 
 	bool m_shouldRotate = false;
 
