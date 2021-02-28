@@ -198,6 +198,8 @@ void Application::DrawImguiUi()
     StartImguiFrame();
 
     ImGui::SetNextWindowBgAlpha(m_menuAlpha);
+    ImGui::SetNextWindowSize({300, 500}, ImGuiWindowFlags_NoResize);
+    ImGui::SetNextWindowPos({1,1});
 
     ImGui::Begin("Menu");
 
@@ -208,11 +210,16 @@ void Application::DrawImguiUi()
                 ->OpenDialog("ChooseModel", "Choose model", ".fbx,.obj", ".");
 
         if(m_model){
-             ImGui::SameLine();
+
+            ImGui::Image((void*)(intptr_t)m_model->GetMaterial()->diffuse.id, {128, 128});
+
+            ImGui::SameLine();
 
             if(ImGui::Button("Load diffuse"))
                 ImGuiFileDialog::Instance()
                     ->OpenDialog("ChooseDiffuse", "Choose texture", ".png,.jpg,.jpeg", ".");
+
+            ImGui::Image((void*)(intptr_t)m_model->GetMaterial()->specular.id, {128, 128});
 
             ImGui::SameLine();
 
