@@ -6,8 +6,8 @@ in vec3 normalDir;
 in vec2 texCoords;
 in vec3 fragPos;
 in mat3 NormalMatrix;
+in vec3 lightDir;
 
-uniform vec3 LightDir;
 uniform vec3 LightColor;
 uniform mat4 ViewMatrix;
 uniform float LightShiness;
@@ -22,16 +22,20 @@ void main()
 
 	vec3 normal = normalize(vec3(NormalMatrix * normalDir));
 	vec3 viewDir = normalize(fragPos - vec3(0,0,0));
-	vec3 lightDir = normalize(vec3(ViewMatrix * vec4(normalize(LightDir), 0.f)));
 
-	vec3 ambientColor = 0.05f * LightColor * baseColor;
+	vec3 ambientColor = 0.05f * LightColor;
 
 	float diffuse = max(dot(normal, lightDir), 0.0f);
-	vec3 diffuseColor = diffuse * baseColor * LightColor;
+	vec3 diffuseColor = diffuse * LightColor;
 	
-	vec3 halfVector = normalize(-viewDir + -lightDir);
-	float specular = pow(max(dot(normal, halfVector), 0.0f), LightShiness);
-	vec3 specularColor = specular * specularValue * LightColor * baseColor;
+	vec3 specularColor = vec3(0, 0, 0);
+
+	if(diffuse > 0.0f)
+	{
+		vec3 halfVector = normalize(-viewDir + -lightDir);
+		float specular = pow(max(dot(normal, halfVector), 0.0f), LightShiness);
+		specularColor = specularValue * specular * LightColor;
+	}
 	
-	color = vec4(ambientColor + diffuseColor + specularColor, 1.0f);
+	color = vec4((ambientColor + diffuseColor + specularColor) * baseColor, 1.0f);
 }

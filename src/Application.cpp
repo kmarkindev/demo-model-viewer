@@ -217,7 +217,7 @@ void Application::DrawImguiUi()
 
             if(ImGui::Button("Load diffuse"))
                 ImGuiFileDialog::Instance()
-                    ->OpenDialog("ChooseDiffuse", "Choose texture", ".png,.jpg,.jpeg", ".");
+                    ->OpenDialog("ChooseDiffuse", "Choose diffuse texture", ".png,.jpg,.jpeg", ".");
 
             ImGui::Image((void*)(intptr_t)m_model->GetMaterial()->specular.id, {128, 128});
 
@@ -225,7 +225,7 @@ void Application::DrawImguiUi()
 
             if(ImGui::Button("Load specular"))
                 ImGuiFileDialog::Instance()
-                    ->OpenDialog("ChooseSpecular", "Choose texture", ".png,.jpg,.jpeg", ".");
+                    ->OpenDialog("ChooseSpecular", "Choose specular texture", ".png,.jpg,.jpeg", ".");
         }
     }
 
