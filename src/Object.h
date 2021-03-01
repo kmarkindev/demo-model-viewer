@@ -38,9 +38,8 @@ public:
 	void Scale(glm::vec3 scale);
 	void Move(glm::vec3 delta);
 	void Rotate(glm::quat rotation);
-	void RotateByVector(glm::vec3 rotation);
 	void RotateToDirection(glm::vec3 direction);
-	void RotateLocalByVector(glm::vec3 rotation);
+	void RotateByVector(glm::vec3 rotation);
 	void RotateAround(glm::vec3 origin, glm::vec3 axis, float angle);
 
 };

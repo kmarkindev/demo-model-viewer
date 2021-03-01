@@ -75,10 +75,10 @@ void Object::Move(glm::vec3 delta)
 
 void Object::Rotate(glm::quat rotation)
 {
-	m_rotation *= rotation;
+	m_rotation = rotation * m_rotation;
 }
 
-void Object::RotateLocalByVector(glm::vec3 rotation)
+void Object::RotateByVector(glm::vec3 rotation)
 {
 	rotation = glm::radians(rotation);
 
@@ -97,15 +97,6 @@ void Object::RotateAround(glm::vec3 origin, glm::vec3 axis, float angle)
 	position = glm::rotate(glm::angleAxis(glm::radians(angle), axis), position);
 
 	m_position = position + origin;
-}
-
-void Object::RotateByVector(glm::vec3 rotation)
-{
-	rotation = glm::radians(rotation);
-
-	m_rotation *= glm::angleAxis(rotation.x, glm::vec3(1.f, 0.f, 0.f))
-		* glm::angleAxis(rotation.y, glm::vec3(0.f, 1.f, 0.f))
-		* glm::angleAxis(rotation.z, glm::vec3(0.f, 0.f, 1.f));
 }
 
 void Object::RotateToDirection(glm::vec3 direction)
