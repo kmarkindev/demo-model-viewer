@@ -69,7 +69,7 @@ void Application::Start()
     
     while (!glfwWindowShouldClose(m_window))
     {
-        glfwPollEvents();//whugy
+        glfwPollEvents();
 
         m_renderer->Draw(m_model, m_camera, m_light);
 
@@ -141,13 +141,13 @@ void Application::LoadTexture(std::string path, TextureType type)
 
 void Application::SetupCamera()
 {
-    glm::vec3 modelPosition = m_model ? m_model->GetPosition() : glm::vec3(0,0,0);
+    glm::vec3 modelPosition = m_model ? GetModelPosition() : glm::vec3(0,0,0);
 
     m_camera = new Camera();
     m_camera->SetPerspectiveMatrix(m_startFov, m_startWidth,
         m_startHeight, m_startNear, m_startFar);
     m_camera->SetPosition(m_startCameraPosition);
-    m_camera->RotateToDirection(modelPosition - m_camera->GetPosition());
+    m_camera->RotateToDirection(GetModelPosition() - m_camera->GetPosition());
 }
 
 void Application::SetupLight()
@@ -265,13 +265,10 @@ void Application::DrawImguiUi()
     if(ImGui::CollapsingHeader("Actions"))
     {
         if (ImGui::Button("Reset camera position"))
-        {
-            glm::vec3 modelPosition = m_model ? m_model->GetPosition() : glm::vec3(0,0,0);
-            
+        {            
             m_camera->SetPerspectiveMatrix(m_startFov, m_startWidth,
                 m_startHeight, m_startNear, m_startFar);
             m_camera->SetPosition(m_startCameraPosition);
-            m_camera->RotateToDirection(modelPosition - m_camera->GetPosition());
         }
 
         ImGui::SameLine();
@@ -327,6 +324,11 @@ void Application::DrawImguiUi()
     {
         ImGui::DragFloat("Mouse sensivitity", &m_sensivitity, 0.1f, 0);
         ImGui::DragFloat("Scroll sensivitity", &m_scrollSensivitity, 0.1f, 0);
+        
+        if(ImGui::DragFloat3("Origin", &m_originPosition[0]))
+        {
+            m_camera->RotateToDirection(GetModelPosition() - m_camera->GetPosition());
+        }
     }
 
     if(ImGui::CollapsingHeader("Menu settings"))
@@ -337,6 +339,11 @@ void Application::DrawImguiUi()
     ImGui::End();
 
     EndImgueFrame();
+}
+
+glm::vec3 Application::GetModelPosition() 
+{
+    return (m_model ? m_model->GetPosition() : glm::vec3(0, 0, 0)) + m_originPosition;
 }
 
 void Application::CursorPositionCallback(GLFWwindow* window, double xpos, double ypos)
@@ -362,7 +369,7 @@ void Application::CursorPositionCallback(GLFWwindow* window, double xpos, double
 
     auto cameraUp = app->m_camera->GetUpVector();
     auto cameraRight = app->m_camera->GetRightVector();
-    auto modelPos = app->m_model->GetPosition();
+    auto modelPos = app->GetModelPosition();
 
     app->m_camera->RotateAround(modelPos, cameraUp, xoffset * -app->m_sensivitity);
     app->m_camera->RotateAround(modelPos, cameraRight, yoffset * -app->m_sensivitity);

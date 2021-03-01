@@ -11,17 +11,17 @@ glm::mat4 Object::GetModelMatrix()
 
 glm::vec3 Object::GetForwardVector()
 {
-	return glm::toMat4(m_rotation) * glm::vec4(0.f, 0.f, 1.f, 0.f);
+	return glm::rotate(m_rotation, glm::vec3(0, 0, 1));
 }
 
 glm::vec3 Object::GetUpVector()
 {
-	return glm::toMat4(m_rotation) * glm::vec4(0.f, 1.f, 0.f, 0.f);
+	return glm::rotate(m_rotation, glm::vec3(0, 1, 0));
 }
 
 glm::vec3 Object::GetRightVector()
 {
-	return glm::toMat4(m_rotation) * glm::vec4(1.f, 0.f, 0.f, 0.f);
+	return glm::rotate(m_rotation, glm::vec3(1, 0, 0));
 }
 
 void Object::SetRotation(glm::quat rotation)
@@ -32,7 +32,7 @@ void Object::SetRotation(glm::quat rotation)
 void Object::SetRotationByVector(glm::vec3 rotation)
 {
 	rotation = glm::radians(rotation);
-
+	
 	m_rotation = glm::angleAxis(rotation.x, glm::vec3(1.f, 0.f, 0.f))
 		* glm::angleAxis(rotation.y, glm::vec3(0.f, 1.f, 0.f))
 		* glm::angleAxis(rotation.z, glm::vec3(0.f, 0.f, 1.f));
@@ -92,6 +92,8 @@ void Object::RotateAround(glm::vec3 origin, glm::vec3 axis, float angle)
 {
 	auto position = m_position - origin;
 
+	axis = glm::normalize(axis);
+	
 	position = glm::rotate(glm::angleAxis(glm::radians(angle), axis), position);
 
 	m_position = position + origin;

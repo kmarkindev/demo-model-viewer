@@ -49,6 +49,7 @@ private:
 	glm::vec4 m_startLightColor = glm::vec4(1.f, 1.f, 1.f, 1.f);
 	glm::vec3 m_startModelScale = glm::vec3(0.1f, 0.1f, 0.1f);
 	glm::vec3 m_startLightDirection = glm::normalize(glm::vec3(-1.0, 0.f, -1.0f));
+	glm::vec3 m_originPosition = glm::vec3(0,0,0);
 
 	int m_startWidth = 900;
 	int m_startHeight = 900;
@@ -79,6 +80,8 @@ private:
 	void StartImguiFrame();
 	void EndImgueFrame();
 	void DrawImguiUi();
+
+	glm::vec3 GetModelPosition();
 
 	static void CursorPositionCallback(GLFWwindow* window, double xpos, double ypos);
 	static void MouseButtonCallback(GLFWwindow* window, int button, int action, int mods);
