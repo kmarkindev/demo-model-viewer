@@ -25,6 +25,16 @@ void Model::SetShader(Shader* shader)
 	m_shader = shader;
 }
 
+void Model::UseOpacity(bool status) 
+{
+	m_useOpacity = status;
+}
+
+bool Model::GetUseOpacity() 
+{
+	return m_useOpacity;
+}
+
 void Model::Unload() 
 {
 	// m_material->UnloadMaterial();

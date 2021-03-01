@@ -226,6 +226,22 @@ void Application::DrawImguiUi()
             if(ImGui::Button("Load specular"))
                 ImGuiFileDialog::Instance()
                     ->OpenDialog("ChooseSpecular", "Choose specular texture", ".png,.jpg,.jpeg", ".");
+
+            ImGui::Image((void*)(intptr_t)m_model->GetMaterial()->opacity.id, {128, 128});
+
+            ImGui::SameLine();
+
+            if(ImGui::Button("Load opacity"))
+                ImGuiFileDialog::Instance()
+                    ->OpenDialog("ChooseOpacity", "Choose opacity texture", ".png,.jpg,.jpeg", ".");
+
+            ImGui::SameLine();
+
+            bool useOpacity = m_model->GetUseOpacity();
+            if(ImGui::Checkbox("Use opacity", &useOpacity))
+            {
+                m_model->UseOpacity(useOpacity);
+            }
         }
     }
 
@@ -257,6 +273,17 @@ void Application::DrawImguiUi()
         {
             std::string path = ImGuiFileDialog::Instance()->GetFilePathName();
             LoadTexture(path, TextureType::Specular);
+        }
+    
+        ImGuiFileDialog::Instance()->Close();
+    }
+
+     if (ImGuiFileDialog::Instance()->Display("ChooseOpacity")) 
+    {
+        if (ImGuiFileDialog::Instance()->IsOk())
+        {
+            std::string path = ImGuiFileDialog::Instance()->GetFilePathName();
+            LoadTexture(path, TextureType::Opacity);
         }
     
         ImGuiFileDialog::Instance()->Close();

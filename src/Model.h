@@ -17,6 +17,7 @@ private:
 	Shader* m_shader;
 	Material* m_material;
 	std::vector<Mesh>* m_meshes;
+	bool m_useOpacity = false;
 
 public:
 
@@ -26,6 +27,9 @@ public:
 	Material* GetMaterial();
 	void SetMaterial(Material* material);
 	void SetShader(Shader* shader);
+
+	void UseOpacity(bool status);
+	bool GetUseOpacity();
 
 	void Unload();
 

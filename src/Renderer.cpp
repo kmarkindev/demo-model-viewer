@@ -31,15 +31,20 @@ void Renderer::Draw(Model* model, Camera* camera, DirLight* light)
 	shader->SetVec3Uniform("LightDir", light->GetForwardVector());
 	shader->SetVec3Uniform("LightColor", light->color);
 	shader->SetFloatUniform("LightShiness", light->shiness);
+	shader->SetBoolUniform("UseOpacity", model->m_useOpacity);
 	
 	shader->SetIntUniform("diffuseTexture", 0);
 	shader->SetIntUniform("specularTexture", 1);
+	shader->SetIntUniform("opacityTexture", 2);
 	
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, model->m_material->diffuse.id);
 
 	glActiveTexture(GL_TEXTURE1);
 	glBindTexture(GL_TEXTURE_2D, model->m_material->specular.id);
+
+	glActiveTexture(GL_TEXTURE2);
+	glBindTexture(GL_TEXTURE_2D, model->m_material->opacity.id);
 
 	for (Mesh mesh : model->m_meshes[0])
 	{
@@ -52,6 +57,9 @@ void Renderer::Draw(Model* model, Camera* camera, DirLight* light)
 	glBindTexture(GL_TEXTURE_2D, 0);
 
 	glActiveTexture(GL_TEXTURE1);
+	glBindTexture(GL_TEXTURE_2D, 0);
+
+	glActiveTexture(GL_TEXTURE2);
 	glBindTexture(GL_TEXTURE_2D, 0);
 }
 

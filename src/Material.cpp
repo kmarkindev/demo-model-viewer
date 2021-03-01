@@ -4,6 +4,7 @@ void Material::UnloadMaterial()
 {
     specular.Unload();
     diffuse.Unload();
+    opacity.Unload();
 }
 
 void Material::ReplaceTexture(Texture newTexture, TextureType type) 
@@ -16,6 +17,9 @@ void Material::ReplaceTexture(Texture newTexture, TextureType type)
         break;
     case TextureType::Specular:
         texture = &specular;
+        break;
+    case TextureType::Opacity:
+        texture = &opacity;
         break;
     default:
         throw NotImplementedException();

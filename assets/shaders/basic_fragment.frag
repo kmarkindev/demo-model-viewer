@@ -14,6 +14,8 @@ uniform vec3 CameraPos;
 
 uniform sampler2D diffuseTexture;
 uniform sampler2D specularTexture;
+uniform sampler2D opacityTexture;
+uniform bool UseOpacity;
 
 void main()
 {
@@ -41,5 +43,12 @@ void main()
 		specular = specularStrength * spec * LightColor;
 	}
 	
-	color = vec4((ambient + diffuse + specular) * objectColor, 1.0f);
+	float opacity = 1.f;
+
+	if(UseOpacity)
+	{
+		opacity = texture(opacityTexture, texCoords).x;
+	}
+
+	color = vec4((ambient + diffuse + specular) * objectColor, opacity);
 }
