@@ -6,36 +6,40 @@ in vec3 normalDir;
 in vec2 texCoords;
 in vec3 fragPos;
 in mat3 NormalMatrix;
-in vec3 lightDir;
 
 uniform vec3 LightColor;
-uniform mat4 ViewMatrix;
+uniform vec3 LightDir;
 uniform float LightShiness;
+uniform vec3 CameraPos;
 
 uniform sampler2D diffuseTexture;
 uniform sampler2D specularTexture;
 
 void main()
 {
-	vec3 baseColor = texture(diffuseTexture, texCoords).rgb;
-	vec3 specularValue = texture(specularTexture, texCoords).rgb;
 
-	vec3 normal = normalize(vec3(NormalMatrix * normalDir));
-	vec3 viewDir = normalize(fragPos - vec3(0,0,0));
+	vec3 objectColor = texture(diffuseTexture, texCoords).rgb;
+	vec3 lightDir = -LightDir;
 
-	vec3 ambientColor = 0.05f * LightColor;
+	// ambient
+    vec3 ambient = 0.1 * LightColor;
+  	
+    // diffuse 
+    vec3 norm = normalize(vec3(NormalMatrix * normalDir));
+    float diff = max(dot(norm, lightDir), 0.0);
+    vec3 diffuse = diff * LightColor;
+    
+    // specular
+	vec3 specular = vec3(0,0,0);
 
-	float diffuse = max(dot(normal, lightDir), 0.0f);
-	vec3 diffuseColor = diffuse * LightColor;
-	
-	vec3 specularColor = vec3(0, 0, 0);
-
-	if(diffuse > 0.0f)
+	if(diff > 0)
 	{
-		vec3 halfVector = normalize(-viewDir + -lightDir);
-		float specular = pow(max(dot(normal, halfVector), 0.0f), LightShiness);
-		specularColor = specularValue * specular * LightColor;
+		vec3 specularStrength = texture(specularTexture, texCoords).rgb;
+		vec3 viewDir = normalize(CameraPos - fragPos);
+		vec3 halfVector = normalize(viewDir + lightDir);
+		float spec = pow(max(dot(norm, halfVector), 0.0), 32);
+		specular = specularStrength * spec * LightColor;
 	}
 	
-	color = vec4((ambientColor + diffuseColor + specularColor) * baseColor, 1.0f);
+	color = vec4((ambient + diffuse + specular) * objectColor, 1.0f);
 }

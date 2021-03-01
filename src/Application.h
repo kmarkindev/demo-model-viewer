@@ -48,7 +48,7 @@ private:
 	glm::vec3 m_startCameraPosition = glm::vec3(50.f, 0.f, 0.f);
 	glm::vec4 m_startLightColor = glm::vec4(1.f, 1.f, 1.f, 1.f);
 	glm::vec3 m_startModelScale = glm::vec3(0.1f, 0.1f, 0.1f);
-	glm::vec3 m_startLightDirection = glm::normalize(glm::vec3(1.0, 0.f, 1.0f));
+	glm::vec3 m_startLightDirection = glm::normalize(glm::vec3(-1.0, 0.f, -1.0f));
 
 	int m_startWidth = 900;
 	int m_startHeight = 900;

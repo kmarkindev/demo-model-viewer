@@ -27,6 +27,7 @@ void Renderer::Draw(Model* model, Camera* camera, DirLight* light)
 	shader->SetMat4Uniform("ModelMatrix", model->GetModelMatrix());
 	shader->SetMat4Uniform("ViewMatrix", camera->GetViewMatrix());
 	shader->SetMat4Uniform("ProjectionMatrix", camera->GetProjectionMatrix());
+	shader->SetVec3Uniform("CameraPos", camera->GetPosition());
 	shader->SetVec3Uniform("LightDir", light->GetForwardVector());
 	shader->SetVec3Uniform("LightColor", light->color);
 	shader->SetFloatUniform("LightShiness", light->shiness);

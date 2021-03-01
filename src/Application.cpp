@@ -69,7 +69,7 @@ void Application::Start()
     
     while (!glfwWindowShouldClose(m_window))
     {
-        glfwPollEvents();
+        glfwPollEvents();//whugy
 
         m_renderer->Draw(m_model, m_camera, m_light);
 
