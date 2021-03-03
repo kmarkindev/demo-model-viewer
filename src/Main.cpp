@@ -1,4 +1,6 @@
 #include "Application.h"
+#include <exception>
+#include <iostream>
 
 // stb_image requires to define it here
 #define STB_IMAGE_IMPLEMENTATION
@@ -6,13 +8,22 @@
 
 int main(int argc, char* argv[])
 {
-    auto app = new Application();
+    try
+    {
+        auto app = new Application();
 
-    app->Init(argc, argv);
+        app->Init(argc, argv);
 
-    app->Start();
+        app->Start();
 
-    app->Shutdown();
+        app->Shutdown();
+
+    }
+    catch(std::exception ex)
+    {
+        std::cout << ex.what() << std::endl;
+        return 1;
+    }
 
     return 0;
 }

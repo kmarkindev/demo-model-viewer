@@ -7,7 +7,7 @@ Model::Model(std::vector<Mesh>* meshes)
 
 Model::~Model()
 {
-	delete m_meshes;
+	 
 }
 
 Material* Model::GetMaterial() 
@@ -47,13 +47,10 @@ bool Model::GetUseNormal()
 
 void Model::Unload() 
 {
-	// m_material->UnloadMaterial();
+	m_material->UnloadMaterial();
 
-	// for(auto mesh : m_meshes[0])
-	// {
-	// 	mesh.Unload();
-	// }
-
-	// delete m_meshes;
-	// delete m_material;
+	for(auto mesh : m_meshes[0])
+	{
+		mesh.Unload();
+	}
 }

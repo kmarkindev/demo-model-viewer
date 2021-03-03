@@ -332,6 +332,7 @@ void Application::DrawImguiUi()
             m_camera->SetPerspectiveMatrix(m_startFov, m_startWidth,
                 m_startHeight, m_startNear, m_startFar);
             m_camera->SetPosition(m_startCameraPosition);
+            m_camera->RotateToDirection(GetModelPosition() - m_camera->GetPosition());
         }
 
         ImGui::SameLine();
