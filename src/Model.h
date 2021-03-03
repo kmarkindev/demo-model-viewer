@@ -18,6 +18,7 @@ private:
 	Material* m_material;
 	std::vector<Mesh>* m_meshes;
 	bool m_useOpacity = false;
+	bool m_useNormal = false;
 
 public:
 
@@ -30,6 +31,9 @@ public:
 
 	void UseOpacity(bool status);
 	bool GetUseOpacity();
+
+	void UseNormal(bool status);
+	bool GetUseNormal();
 
 	void Unload();
 

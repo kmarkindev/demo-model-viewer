@@ -9,6 +9,7 @@ struct Material
 	Texture diffuse;
 	Texture specular;
 	Texture opacity;
+	Texture normal;
 
 	void UnloadMaterial();
 	void ReplaceTexture(Texture newTexture, TextureType type);

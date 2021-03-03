@@ -15,11 +15,13 @@ uniform vec3 CameraPos;
 uniform sampler2D diffuseTexture;
 uniform sampler2D specularTexture;
 uniform sampler2D opacityTexture;
+uniform sampler2D normalTexture;
+
 uniform bool UseOpacity;
+uniform bool UseNormal;
 
 void main()
 {
-
 	vec3 objectColor = texture(diffuseTexture, texCoords).rgb;
 	vec3 lightDir = -LightDir;
 

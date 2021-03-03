@@ -6,7 +6,8 @@ enum class TextureType
 {
 	Diffuse,
 	Specular,
-	Opacity
+	Opacity,
+	Normal
 };
 
 struct Texture

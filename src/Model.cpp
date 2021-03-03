@@ -35,6 +35,16 @@ bool Model::GetUseOpacity()
 	return m_useOpacity;
 }
 
+void Model::UseNormal(bool status) 
+{
+	m_useNormal = status;
+}
+
+bool Model::GetUseNormal() 
+{
+	return m_useNormal;
+}
+
 void Model::Unload() 
 {
 	// m_material->UnloadMaterial();
