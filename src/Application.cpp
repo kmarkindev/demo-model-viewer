@@ -40,8 +40,12 @@ void Application::Init(int argc, char* argv[])
     std::string rootFolder = std::filesystem::path(argv[0]).parent_path().string();
     m_assetsManager = new AssetsManager(rootFolder);
 
-    m_loader = new AssimpLoader(aiProcess_Triangulate 
-        | aiProcess_FlipUVs | aiProcess_PreTransformVertices);
+    m_loader = new AssimpLoader(
+        aiProcess_Triangulate 
+        | aiProcess_FlipUVs
+        | aiProcess_PreTransformVertices
+        | aiProcess_CalcTangentSpace
+    );
 
     m_renderer = new Renderer();
     m_renderer->Init();

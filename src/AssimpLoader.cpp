@@ -32,11 +32,13 @@ Mesh AssimpLoader::ProcessMesh(aiMesh* aiMesh, const aiScene* aiScene)
         auto aiPosition = aiMesh->mVertices[j];
         auto aiNormal = aiMesh->mNormals[j];
         auto aiTextureCoords = aiMesh->mTextureCoords[0][j];
+        auto aiTangent = aiMesh->mTangents[j]; 
 
         vertices->push_back({
             glm::vec3(aiPosition.x, aiPosition.y, aiPosition.z),
             glm::vec3(aiNormal.x, aiNormal.y, aiNormal.z),
-            glm::vec2(aiTextureCoords.x, aiTextureCoords.y)
+            glm::vec2(aiTextureCoords.x, aiTextureCoords.y),
+            glm::vec3(aiTangent.x, aiTangent.y, aiTangent.z)
         });
     }
 
@@ -68,9 +70,12 @@ Mesh AssimpLoader::ProcessMesh(aiMesh* aiMesh, const aiScene* aiScene)
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (GLvoid*)offsetof(Vertex, position));
     glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (GLvoid*)offsetof(Vertex, normal));
     glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (GLvoid*)offsetof(Vertex, textureCoords));
+    glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (GLvoid*)offsetof(Vertex, tangent));
+    
     glEnableVertexAttribArray(0);
     glEnableVertexAttribArray(1);
     glEnableVertexAttribArray(2);
+    glEnableVertexAttribArray(3);
 
     glBindVertexArray(0);
     glBindBuffer(GL_ARRAY_BUFFER, 0);

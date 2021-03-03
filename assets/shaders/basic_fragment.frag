@@ -6,6 +6,7 @@ in vec3 normalDir;
 in vec2 texCoords;
 in vec3 fragPos;
 in mat3 NormalMatrix;
+in mat3 TBN;
 
 uniform vec3 LightColor;
 uniform vec3 LightDir;
@@ -25,11 +26,18 @@ void main()
 	vec3 objectColor = texture(diffuseTexture, texCoords).rgb;
 	vec3 lightDir = -LightDir;
 
+	vec3 norm = normalDir;
+	if(UseNormal)
+	{
+		norm = texture(normalTexture, texCoords).rgb;
+		norm = norm * 2.0 - 1.0;
+		norm = normalize(TBN * norm);
+	}
+
 	// ambient
     vec3 ambient = 0.1 * LightColor;
   	
     // diffuse 
-    vec3 norm = normalize(vec3(NormalMatrix * normalDir));
     float diff = max(dot(norm, lightDir), 0.0);
     vec3 diffuse = diff * LightColor;
     
