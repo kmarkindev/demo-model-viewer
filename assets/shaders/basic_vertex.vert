@@ -22,8 +22,11 @@ void main()
 	NormalMatrix = mat3(transpose(inverse(ModelMatrix)));
 	normalDir = normalize(vec3(NormalMatrix * normal));
 
+	// Gram-Schmidt process
+	vec3 OptimizedTangent = normalize(tangent - dot(tangent, normalDir) * normalDir);
+
 	vec3 bitTangent = cross(normalDir, tangent);
-	TBN = mat3(tangent, bitTangent, normalDir);
+	TBN = mat3(OptimizedTangent, bitTangent, normalDir);
 
 	vec4 vertPosition = ModelMatrix * vec4(verticle.xyz, 1.0f);
 
