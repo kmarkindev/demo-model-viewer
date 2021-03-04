@@ -28,4 +28,8 @@ target_sources(ModelViewer PRIVATE
 	TextureLoader.cpp
 	AssetsManager.h
 	AssetsManager.cpp
+	Skybox.cpp
+	Skybox.h
+	Cubemap.h
+	Cubemap.cpp
 )

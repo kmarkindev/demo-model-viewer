@@ -146,3 +146,11 @@ struct CannotSetTexture : public CustomException
 		return "Cannot set texture exception";
 	}
 };
+
+struct CannotLoadCubemap : public CustomException
+{
+	const std::string GetMessage() const noexcept override
+	{
+		return "Cannot load cubemap: Not enough or too many textures (Should be 5)";
+	}
+};
