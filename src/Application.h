@@ -26,6 +26,7 @@
 #include "TextureLoader.h"
 #include "AssetsManager.h"
 #include <ImGuiFileDialog.h>
+#include "Skybox.h"
 
 class Application 
 {
@@ -44,6 +45,7 @@ private:
 	Model* m_model = nullptr;
 	DirLight* m_light = nullptr;
 	Shader* m_shader = nullptr;
+	Skybox* m_skybox = nullptr;
 
 	glm::vec3 m_startCameraPosition = glm::vec3(50.f, 0.f, 0.f);
 	glm::vec4 m_startLightColor = glm::vec4(1.f, 1.f, 1.f, 1.f);

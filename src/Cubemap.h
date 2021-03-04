@@ -9,6 +9,7 @@ public:
     Cubemap(GLuint cubemapId);
 
     GLuint GetTextureId();
+    void Unload();
 
 private:
 
