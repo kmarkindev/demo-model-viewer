@@ -116,6 +116,10 @@ void Application::SetupShader()
     m_shader = new Shader(m_assetsManager->GetAssetPath({"shaders", "basic_vertex.vert"}),
         m_assetsManager->GetAssetPath({"shaders", "basic_fragment.frag"}));
     m_shader->LoadAndCompile();
+
+    m_skyboxShader = new Shader(m_assetsManager->GetAssetPath({"shaders", "skybox.vert"}),
+        m_assetsManager->GetAssetPath({"shaders", "skybox.frag"}));
+    m_skyboxShader->LoadAndCompile();
 }
 
 void Application::LoadModel(std::string path)
@@ -142,6 +146,18 @@ void Application::LoadTexture(std::string path, TextureType type)
 
     Material* material = m_model->GetMaterial();
     material->ReplaceTexture(texture, type);
+}
+
+void Application::LoadSkybox(std::vector<std::string> paths) 
+{
+    if(m_skybox)
+    {
+        m_skybox->Unload();
+    }
+
+    Cubemap cubemap = m_textureLoader->LoadCubemap(paths);
+
+    m_skybox = new Skybox(cubemap, m_skyboxShader);
 }
 
 void Application::SetupCamera()
@@ -392,6 +408,26 @@ void Application::DrawImguiUi()
         if(ImGui::DragFloat3("Origin", &m_originPosition[0]))
         {
             m_camera->RotateToDirection(GetModelPosition() - m_camera->GetPosition());
+        }
+    }
+
+    if(ImGui::CollapsingHeader("Skybox"))
+    {
+        bool useSkybox = m_renderer->GetUseSkybox();
+        if(ImGui::Checkbox("Use Skybox", &useSkybox))
+        {
+            m_renderer->SetUseSkybox(useSkybox);
+        }
+
+        static std::vector<std::string> skyboxPaths;
+
+        //Add 6 text boxes with paths
+        //Allow to select paths from OpenFileDialog
+        //Do not allow to load texture if all textures are not loaded
+
+        if(skyboxPaths.size() == 5 && ImGui::Button("Load skybox"))
+        {
+            LoadSkybox(skyboxPaths);
         }
     }
 

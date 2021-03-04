@@ -27,6 +27,7 @@
 #include "AssetsManager.h"
 #include <ImGuiFileDialog.h>
 #include "Skybox.h"
+#include <algorithm>
 
 class Application 
 {
@@ -45,6 +46,7 @@ private:
 	Model* m_model = nullptr;
 	DirLight* m_light = nullptr;
 	Shader* m_shader = nullptr;
+	Shader* m_skyboxShader = nullptr;
 	Skybox* m_skybox = nullptr;
 
 	glm::vec3 m_startCameraPosition = glm::vec3(50.f, 0.f, 0.f);
@@ -72,6 +74,7 @@ private:
 	void SetupShader();
 	void LoadModel(std::string path);
 	void LoadTexture(std::string path, TextureType type);
+	void LoadSkybox(std::vector<std::string> paths);
 	void SetupCamera();
 	void SetupLight();
 

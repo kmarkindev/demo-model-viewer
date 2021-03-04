@@ -2,7 +2,7 @@
 
 void Renderer::Init()
 {
-	glClearColor(0.3f, 0.3f, 0.3f, 1.f);
+	glClearColor(m_clearColor.r, m_clearColor.g, m_clearColor.b, 1.f);
 	glEnable(GL_DEPTH_TEST);
 
 	ToggleAntiAliasing(true);
@@ -12,11 +12,32 @@ void Renderer::Init()
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);  
 }
 
-void Renderer::Draw(Model* model, Camera* camera, DirLight* light)
+void Renderer::Draw(Model* model, Camera* camera, DirLight* light, Skybox* skybox)
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	
-	if(!model){
+
+	auto viewMatrix = camera->GetViewMatrix();
+	auto projMatrix = camera->GetProjectionMatrix();
+
+	if(m_useSkybox && skybox)
+	{
+		auto shader = skybox->m_shader;
+
+		shader.UseProgram();
+		shader.SetIntUniform("skyboxTexture", 0);
+		shader.SetMat4Uniform("projection", projMatrix);
+		shader.SetMat4Uniform("view", viewMatrix);
+
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_CUBE_MAP, skybox->m_cubemap.GetTextureId());
+
+		glDrawArrays(GL_TRIANGLES, 0, sizeof(skybox->m_vertices) / sizeof(skybox->m_vertices[0]));
+
+		glBindTexture(GL_TEXTURE_CUBE_MAP, 0);
+	}
+
+	if(!model)
+	{
 		return;
 	}
 
@@ -25,8 +46,8 @@ void Renderer::Draw(Model* model, Camera* camera, DirLight* light)
 	shader->UseProgram();
 	
 	shader->SetMat4Uniform("ModelMatrix", model->GetModelMatrix());
-	shader->SetMat4Uniform("ViewMatrix", camera->GetViewMatrix());
-	shader->SetMat4Uniform("ProjectionMatrix", camera->GetProjectionMatrix());
+	shader->SetMat4Uniform("ViewMatrix", viewMatrix);
+	shader->SetMat4Uniform("ProjectionMatrix", projMatrix);
 	shader->SetVec3Uniform("CameraPos", camera->GetPosition());
 	shader->SetVec3Uniform("LightDir", light->GetForwardVector());
 	shader->SetVec3Uniform("LightColor", light->color);
@@ -127,6 +148,26 @@ bool Renderer::IsFaceCullingEnabled()
 CullingMode Renderer::GetFaceCullingMode() 
 {
 	return m_faceCullingMode;
+}
+
+glm::vec3 Renderer::GetClearColor() 
+{
+	return m_clearColor;
+}
+
+void Renderer::SetClearColor(glm::vec3 newClearColor) 
+{
+	m_clearColor = newClearColor;
+}
+
+bool Renderer::GetUseSkybox() 
+{
+	return m_useSkybox;
+}
+
+void Renderer::SetUseSkybox(bool status) 
+{
+	m_useSkybox = status;
 }
 
 GLenum Renderer::GetGlCullingMode(CullingMode mode) 
