@@ -38,7 +38,7 @@ Texture TextureLoader::LoadTexture(std::string path, TextureType type)
 
 Cubemap TextureLoader::LoadCubemap(std::vector<std::string> paths) 
 {
-	if(paths.size() != 5)
+	if(paths.size() != 6)
 	{
 		throw CannotLoadCubemap();
 	}
@@ -51,9 +51,14 @@ Cubemap TextureLoader::LoadCubemap(std::vector<std::string> paths)
 	int width, height, channels;
 	unsigned char* data = nullptr;
 
-	for(int i = 0; i < 5; i++)
+	for(int i = 0; i < 6; i++)
 	{
 		data = stbi_load(paths[i].c_str(), &width, &height, &channels, STBI_rgb);
+
+		if(!data)
+		{
+			throw CannotLoadTexture();
+		}
 
 		glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i,
 			0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);

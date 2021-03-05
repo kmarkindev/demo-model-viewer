@@ -67,6 +67,14 @@ void Application::Start()
     SetupCamera();
     SetupLight();
 
+    LoadSkybox({
+        m_assetsManager->GetAssetPath({"skybox", "SkyBox020001.tif"}),
+        m_assetsManager->GetAssetPath({"skybox", "SkyBox020002.tif"}),
+        m_assetsManager->GetAssetPath({"skybox", "SkyBox020003.tif"}),
+        m_assetsManager->GetAssetPath({"skybox", "SkyBox020004.tif"}),
+        m_assetsManager->GetAssetPath({"skybox", "SkyBox020005.tif"}),
+        m_assetsManager->GetAssetPath({"skybox", "SkyBox020006.tif"})
+    });
     LoadModel(m_assetsManager->GetAssetPath({"models", "backpack", "Survival_BackPack_2.fbx"}));
     LoadTexture(m_assetsManager->GetAssetPath({"models", "backpack","1001_albedo.jpg"}), TextureType::Diffuse);
     LoadTexture(m_assetsManager->GetAssetPath({"models", "backpack", "1001_metallic.jpg"}), TextureType::Specular);
@@ -76,7 +84,7 @@ void Application::Start()
     {
         glfwPollEvents();
 
-        m_renderer->Draw(m_model, m_camera, m_light);
+        m_renderer->Draw(m_model, m_camera, m_light, m_skybox);
 
         DrawImguiUi();
 

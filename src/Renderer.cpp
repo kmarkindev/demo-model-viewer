@@ -21,12 +21,12 @@ void Renderer::Draw(Model* model, Camera* camera, DirLight* light, Skybox* skybo
 
 	if(m_useSkybox && skybox)
 	{
-		auto shader = skybox->m_shader;
+		auto* shader = skybox->m_shader;
 
-		shader.UseProgram();
-		shader.SetIntUniform("skyboxTexture", 0);
-		shader.SetMat4Uniform("projection", projMatrix);
-		shader.SetMat4Uniform("view", viewMatrix);
+		shader->UseProgram();
+		shader->SetIntUniform("skyboxTexture", 0);
+		shader->SetMat4Uniform("projection", projMatrix);
+		shader->SetMat4Uniform("view", viewMatrix);
 
 		glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_CUBE_MAP, skybox->m_cubemap.GetTextureId());
