@@ -74,12 +74,12 @@ void Application::Start()
     m_model->UseNormal(true);
 
     LoadSkybox({
-        m_assetsManager->GetAssetPath({"skybox", "SkyBox02b0001.png"}),
         m_assetsManager->GetAssetPath({"skybox", "SkyBox02b0002.png"}),
-        m_assetsManager->GetAssetPath({"skybox", "SkyBox02b0003.png"}),
         m_assetsManager->GetAssetPath({"skybox", "SkyBox02b0004.png"}),
         m_assetsManager->GetAssetPath({"skybox", "SkyBox02b0005.png"}),
-        m_assetsManager->GetAssetPath({"skybox", "SkyBox02b0006.png"})
+        m_assetsManager->GetAssetPath({"skybox", "SkyBox02b0006.png"}),
+        m_assetsManager->GetAssetPath({"skybox", "SkyBox02b0001.png"}),
+        m_assetsManager->GetAssetPath({"skybox", "SkyBox02b0003.png"}),
     });
     m_renderer->SetUseSkybox(true);
     
