@@ -49,7 +49,7 @@ void main()
 		vec3 specularStrength = texture(specularTexture, texCoords).rgb;
 		vec3 viewDir = normalize(CameraPos - fragPos);
 		vec3 halfVector = normalize(viewDir + lightDir);
-		float spec = pow(max(dot(norm, halfVector), 0.0), 32);
+		float spec = pow(max(dot(norm, halfVector), 0.0), LightShiness);
 		specular = specularStrength * spec * LightColor;
 	}
 	
