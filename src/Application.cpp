@@ -424,21 +424,16 @@ void Application::DrawImguiUi()
 
     if(ImGui::CollapsingHeader("Skybox"))
     {
+        auto clearColor = m_renderer->GetClearColor();
+        if(ImGui::ColorPicker4("Clear color", &clearColor[0]))
+        {
+            m_renderer->SetClearColor(clearColor);
+        }
+
         bool useSkybox = m_renderer->GetUseSkybox();
         if(ImGui::Checkbox("Use Skybox", &useSkybox))
         {
             m_renderer->SetUseSkybox(useSkybox);
-        }
-
-        static std::vector<std::string> skyboxPaths;
-
-        //Add 6 text boxes with paths
-        //Allow to select paths from OpenFileDialog
-        //Do not allow to load texture if all textures are not loaded
-
-        if(skyboxPaths.size() == 5 && ImGui::Button("Load skybox"))
-        {
-            LoadSkybox(skyboxPaths);
         }
     }
 

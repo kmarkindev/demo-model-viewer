@@ -162,6 +162,7 @@ glm::vec3 Renderer::GetClearColor()
 void Renderer::SetClearColor(glm::vec3 newClearColor) 
 {
 	m_clearColor = newClearColor;
+	glClearColor(m_clearColor.r, m_clearColor.g, m_clearColor.b, 1.0f);
 }
 
 bool Renderer::GetUseSkybox() 

@@ -67,7 +67,7 @@ private:
 
 	bool m_shouldRotate = false;
 
-	float m_menuAlpha = 1.f;
+	float m_menuAlpha = 0.5f;
 
 	void CheckInitialization();
 	
