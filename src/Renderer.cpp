@@ -6,10 +6,10 @@ void Renderer::Init()
 	glEnable(GL_DEPTH_TEST);
 
 	ToggleAntiAliasing(true);
-	ToggleFaceCulling(true);
+	ToggleFaceCulling(false);
 
 	glEnable(GL_BLEND);
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);  
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA); 
 }
 
 void Renderer::Draw(Model* model, Camera* camera, DirLight* light, Skybox* skybox)
@@ -21,19 +21,23 @@ void Renderer::Draw(Model* model, Camera* camera, DirLight* light, Skybox* skybo
 
 	if(m_useSkybox && skybox)
 	{
+		glDepthMask(GL_FALSE);
 		auto* shader = skybox->m_shader;
 
 		shader->UseProgram();
 		shader->SetIntUniform("skyboxTexture", 0);
 		shader->SetMat4Uniform("projection", projMatrix);
-		shader->SetMat4Uniform("view", viewMatrix);
+		shader->SetMat4Uniform("view", glm::mat4(glm::mat3(viewMatrix)));
 
 		glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_CUBE_MAP, skybox->m_cubemap.GetTextureId());
 
-		glDrawArrays(GL_TRIANGLES, 0, sizeof(skybox->m_vertices) / sizeof(skybox->m_vertices[0]));
+		glBindVertexArray(skybox->m_VAO);
+		glDrawArrays(GL_TRIANGLES, 0, 36);
+		glBindVertexArray(0);
 
 		glBindTexture(GL_TEXTURE_CUBE_MAP, 0);
+		glDepthMask(GL_TRUE);
 	}
 
 	if(!model)

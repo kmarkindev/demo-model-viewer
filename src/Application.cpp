@@ -67,18 +67,21 @@ void Application::Start()
     SetupCamera();
     SetupLight();
 
-    LoadSkybox({
-        m_assetsManager->GetAssetPath({"skybox", "SkyBox020001.tif"}),
-        m_assetsManager->GetAssetPath({"skybox", "SkyBox020002.tif"}),
-        m_assetsManager->GetAssetPath({"skybox", "SkyBox020003.tif"}),
-        m_assetsManager->GetAssetPath({"skybox", "SkyBox020004.tif"}),
-        m_assetsManager->GetAssetPath({"skybox", "SkyBox020005.tif"}),
-        m_assetsManager->GetAssetPath({"skybox", "SkyBox020006.tif"})
-    });
     LoadModel(m_assetsManager->GetAssetPath({"models", "backpack", "Survival_BackPack_2.fbx"}));
     LoadTexture(m_assetsManager->GetAssetPath({"models", "backpack","1001_albedo.jpg"}), TextureType::Diffuse);
     LoadTexture(m_assetsManager->GetAssetPath({"models", "backpack", "1001_metallic.jpg"}), TextureType::Specular);
     LoadTexture(m_assetsManager->GetAssetPath({"models", "backpack", "1001_normal.png"}), TextureType::Normal);
+    m_model->UseNormal(true);
+
+    LoadSkybox({
+        m_assetsManager->GetAssetPath({"skybox", "SkyBox02b0001.png"}),
+        m_assetsManager->GetAssetPath({"skybox", "SkyBox02b0002.png"}),
+        m_assetsManager->GetAssetPath({"skybox", "SkyBox02b0003.png"}),
+        m_assetsManager->GetAssetPath({"skybox", "SkyBox02b0004.png"}),
+        m_assetsManager->GetAssetPath({"skybox", "SkyBox02b0005.png"}),
+        m_assetsManager->GetAssetPath({"skybox", "SkyBox02b0006.png"})
+    });
+    m_renderer->SetUseSkybox(true);
     
     while (!glfwWindowShouldClose(m_window))
     {

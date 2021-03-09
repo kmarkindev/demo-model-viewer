@@ -3,12 +3,15 @@
 Skybox::Skybox(Cubemap cubemap, Shader* shader)
     : m_cubemap(cubemap), m_shader(shader)
 {
-    m_vertices = new float[36 * 3]{
+
+    const int verticesCount = 36 * 3;
+
+    m_vertices = new float[verticesCount]{
         -1.0f,  1.0f, -1.0f,
         -1.0f, -1.0f, -1.0f,
-        1.0f, -1.0f, -1.0f,
-        1.0f, -1.0f, -1.0f,
-        1.0f,  1.0f, -1.0f,
+         1.0f, -1.0f, -1.0f,
+         1.0f, -1.0f, -1.0f,
+         1.0f,  1.0f, -1.0f,
         -1.0f,  1.0f, -1.0f,
 
         -1.0f, -1.0f,  1.0f,
@@ -18,33 +21,33 @@ Skybox::Skybox(Cubemap cubemap, Shader* shader)
         -1.0f,  1.0f,  1.0f,
         -1.0f, -1.0f,  1.0f,
 
-        1.0f, -1.0f, -1.0f,
-        1.0f, -1.0f,  1.0f,
-        1.0f,  1.0f,  1.0f,
-        1.0f,  1.0f,  1.0f,
-        1.0f,  1.0f, -1.0f,
-        1.0f, -1.0f, -1.0f,
+         1.0f, -1.0f, -1.0f,
+         1.0f, -1.0f,  1.0f,
+         1.0f,  1.0f,  1.0f,
+         1.0f,  1.0f,  1.0f,
+         1.0f,  1.0f, -1.0f,
+         1.0f, -1.0f, -1.0f,
 
         -1.0f, -1.0f,  1.0f,
         -1.0f,  1.0f,  1.0f,
-        1.0f,  1.0f,  1.0f,
-        1.0f,  1.0f,  1.0f,
-        1.0f, -1.0f,  1.0f,
+         1.0f,  1.0f,  1.0f,
+         1.0f,  1.0f,  1.0f,
+         1.0f, -1.0f,  1.0f,
         -1.0f, -1.0f,  1.0f,
 
         -1.0f,  1.0f, -1.0f,
-        1.0f,  1.0f, -1.0f,
-        1.0f,  1.0f,  1.0f,
-        1.0f,  1.0f,  1.0f,
+         1.0f,  1.0f, -1.0f,
+         1.0f,  1.0f,  1.0f,
+         1.0f,  1.0f,  1.0f,
         -1.0f,  1.0f,  1.0f,
         -1.0f,  1.0f, -1.0f,
 
         -1.0f, -1.0f, -1.0f,
         -1.0f, -1.0f,  1.0f,
-        1.0f, -1.0f, -1.0f,
-        1.0f, -1.0f, -1.0f,
+         1.0f, -1.0f, -1.0f,
+         1.0f, -1.0f, -1.0f,
         -1.0f, -1.0f,  1.0f,
-        1.0f, -1.0f,  1.0f
+         1.0f, -1.0f,  1.0f
     };
 
     glGenVertexArrays(1, &m_VAO);
@@ -53,10 +56,18 @@ Skybox::Skybox(Cubemap cubemap, Shader* shader)
     glBindVertexArray(m_VAO);
     glBindBuffer(GL_ARRAY_BUFFER, m_VBO);
 
-    glBufferData(GL_ARRAY_BUFFER, sizeof(m_vertices), &m_vertices, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(m_vertices[0]) * verticesCount, m_vertices, GL_STATIC_DRAW);
+
+    glEnableVertexAttribArray(0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(m_vertices[0]) * 3, (GLvoid*)0);
     
     glBindVertexArray(0);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
+}
+
+Skybox::~Skybox() 
+{
+    delete[] m_vertices;
 }
 
 void Skybox::Unload() 

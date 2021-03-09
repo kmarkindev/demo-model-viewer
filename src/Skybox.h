@@ -20,7 +20,7 @@ class Skybox
 public:
 
     Skybox(Cubemap cubemap, Shader* shader);
-
+    ~Skybox();
     void Unload();
 
 private: 
