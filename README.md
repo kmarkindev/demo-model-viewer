@@ -2,6 +2,8 @@
 Demo app which allows you to view a textured, phong shaded 3d model.
 I've created it to get my first experience with 3D graphics and main game programming patterns.
 
+![GIF Preview of model-viewer](https://github.com/Lackym/demo-model-viewer/blob/master/model-viewer-preview.gif)
+
 # How to build
 To build this demo you have to use CMake with Mingw64 GCC.
 Before build, make sure that you have all dependencies installed. You can see all of them in the main CMakeLists.txt file.
