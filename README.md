@@ -1,6 +1,5 @@
 # Model viewer
-Demo app which allows you to view a textured, phong shaded 3d model.
-I've created it to get my first experience with 3D graphics and main game programming patterns.
+Application which allows you to view a textured, phong shaded 3d model and config the rendering of this model. Also, You can load your own models and textures.
 
 ![GIF Preview of model-viewer](https://github.com/Lackym/demo-model-viewer/blob/master/model-viewer-preview.gif)
 
